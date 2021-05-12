@@ -8,10 +8,6 @@ private:
 
 public:
 
-	LinkedList()
-	{
-		Head = nullptr;
-	}
 
 	~LinkedList()
 	{
