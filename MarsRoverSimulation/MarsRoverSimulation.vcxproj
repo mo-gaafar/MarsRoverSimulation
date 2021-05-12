@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayList.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />
   </ItemGroup>
