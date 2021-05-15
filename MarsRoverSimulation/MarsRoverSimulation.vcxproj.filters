@@ -7,5 +7,6 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="Event.h" />
   </ItemGroup>
 </Project>
