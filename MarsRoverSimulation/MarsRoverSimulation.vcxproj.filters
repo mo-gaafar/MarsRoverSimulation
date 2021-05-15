@@ -9,5 +9,6 @@
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Mission.h" />
+    <ClInclude Include="Rover.h" />
   </ItemGroup>
 </Project>

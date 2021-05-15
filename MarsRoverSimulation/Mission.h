@@ -15,6 +15,10 @@ public:
 	int getTLOC() { return targetLoc; }
 	int getMDUR() { return missionDur; }
 	int getSIG() { return sig; }
+
+	void setTYP(char in) { missionType = in; } //In case of promotion
+
+	~Mission() {}
 };
 
 Mission::Mission(int f, char mt, int tl, int md, int s) {

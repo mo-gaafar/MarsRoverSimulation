@@ -20,6 +20,8 @@ public:
 	int getTLOC() { return targetLoc; }
 	int getMDUR() { return misssionDur; }
 	int getSIG() { return sig; }
+
+	~Event() {}
 };
 
 Event::Event(char ev, char typ, int ed, int id, int tloc, int mdur, int s) {
