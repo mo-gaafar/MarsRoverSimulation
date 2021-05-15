@@ -11,4 +11,7 @@
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Rover.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>
