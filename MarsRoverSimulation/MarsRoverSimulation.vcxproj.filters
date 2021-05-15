@@ -8,5 +8,6 @@
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="Mission.h" />
   </ItemGroup>
 </Project>
