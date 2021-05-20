@@ -146,6 +146,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="arrqueue.h" />
     <ClInclude Include="linkedstack.h" />
+    <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />

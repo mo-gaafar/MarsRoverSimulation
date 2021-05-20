@@ -11,6 +11,7 @@
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Rover.h" />
     <ClInclude Include="linkedstack.h" />
+    <ClInclude Include="PrioQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
