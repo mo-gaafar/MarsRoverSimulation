@@ -4,7 +4,7 @@
 using namespace std;
 
 template<typename T>
-class queue {
+class ArrQueue {
 private:
 	T* items;
 	int front;
@@ -12,7 +12,7 @@ private:
 	int arrsize;
 public:
 
-	queue(int MaxSize) : arrsize(MaxSize)
+	ArrQueue(int MaxSize) : arrsize(MaxSize)
 	{
 		items = new T[arrsize];
 		front = -1;
@@ -60,7 +60,7 @@ public:
 		}
 	}
 
-	void frontvalue(T& value) {
+	void peek(T& value) {
 		if (isempty())value = -1;
 		else
 		{

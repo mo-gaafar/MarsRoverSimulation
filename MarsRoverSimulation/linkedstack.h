@@ -1,10 +1,13 @@
 #pragma once
 #include"Node.h"
 template<typename T>
-class linkedstack {
+class LinkedStack {
 private:
 	Node<T>* top = nullptr;
 public:
+	LinkedStack() {
+	}
+
 	bool push(T& value) {
 
 		Node<T>* new_NODE = new Node<T>;
@@ -20,9 +23,9 @@ public:
 		}
 		top = new_NODE;
 	}
-	 bool pop(T& topentry) {
-		 if (top == nullptr)
-			 return false;
+	bool pop(T& topentry) {
+		if (top == nullptr)
+			return false;
 		else
 		{
 			Node<T>* Temp = top;
@@ -32,14 +35,14 @@ public:
 			return true;
 		}
 	}
-   bool peek(T& topentry){
-	   if (top == nullptr)
-		   return false;
-	   else
-	   {
-		  
-		   topentry = top;
-		   return true;
-	   }
-   }
+	bool peek(T& topentry) {
+		if (top == nullptr)
+			return false;
+		else
+		{
+
+			topentry = top;
+			return true;
+		}
+	}
 };

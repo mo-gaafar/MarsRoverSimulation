@@ -139,13 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MarsStation.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="ArrQueue.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="arrqueue.h" />
-    <ClInclude Include="linkedstack.h" />
+    <ClInclude Include="LinkedStack.h" />
+    <ClInclude Include="MarsStation.h" />
     <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Node.h" />
