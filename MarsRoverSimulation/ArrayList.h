@@ -61,7 +61,7 @@ bool ArrayList<T> :: delPos(int pos) {
 		return false;
 	else if (pos == count - 1) { //If the positon entered is the last position
 		array[pos] = NULL;
-		return true
+		return true;
 	}
 	for (int i = pos; i < count; i++) { //Shifting all elements to the left
 		array[i] = array[i + 1];
