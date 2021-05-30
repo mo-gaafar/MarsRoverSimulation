@@ -10,7 +10,6 @@ private:
 	int sig;
 public:
 	Event(char ev, char typ, int ed, int id, int tloc, int mdur, int s); //If event is formulation
-	Event(char ev, int ed, int id); //If event is cancellation or promotion
 
 	//GETTERS
 	char getET() { return eventType; }
