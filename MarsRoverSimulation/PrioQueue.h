@@ -1,5 +1,7 @@
 #pragma once
 //#include "Node.h"
+#include <iostream>
+using namespace std;
 template<class T>
 //Using array heap implementation to save the overhead of a node class
 //This is a MaxHeap, with the largest element at the top
@@ -10,11 +12,11 @@ private:
 	int size = 0;
 	T* Items = new T[capacity]; //Dynamically allocated array of elements
 
-	int getParentIndex(int child) { return (index - 1) / 2 }
+	int getParentIndex(int child) { return (child - 1) / 2; }
 	bool hasParent(int index) { return getParentIndex(index) >= 0;} //checks if the parent index isnt negative
-	int getLeftChildIndex(int parent){return 2(parent +1) }
+	int getLeftChildIndex(int parent) { return 2(parent + 1); }
 	bool hasLeftChild(int index) { return getLeftChildIndex(index) < size; }//checks if the left child is within the array
-	int getRightChildIndex(int parent){return 2(parent +2) }
+	int getRightChildIndex(int parent) { return 2(parent + 2); }
 	bool hasRightChild(int index) { return getRightChildIndex(index) < size; }//checks if right child within array
 
 
@@ -102,6 +104,13 @@ public:
 			return true;
 		}
 		return false;
+	}
+
+	void print() {
+		for (int i = 0; i < size; i++)
+		{
+			cout << Items[i] << endl;
+		}
 	}
 
 };
