@@ -16,31 +16,51 @@ private:
 	int EventSize;
 	int EmergRovNum;
 	int PolarRovNum;
+
+	//Main Data Structures
+
+	//Available Rovers
+	PrioQueue<Rover> Pol_Rover;
+	PrioQueue<Rover> Emerg_Rover;
+	//Waiting Missions
+	ArrQueue<Mission> PolarWaiting_Mission;
+	PrioQueue<Mission> EmergWaiting_Mission;
+	LinkedStack<Mission> CompletedMissions;
+
+
+
 public:
 	MarsStation() {
 		day = 0;
 		ArrQueue<Event> EventList(EventSize);
 		PrioQueue<Rover> Emerg_Rovers(EmergRovNum);
 		PrioQueue<Rover> Polar_Rovers(PolarRovNum);
-		Initialize(Arr1, Arr2, Arr3, Arr4, Arr5, Arr6, Arr7, EventSize, EventList, cd1, s1, Emerg_Rovers, cd2, s2, Polar_Rovers);
-	}
+		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
+			Polar_Rovers, CheckupDurEmerg, SpeedEmerg, Emerg_Rovers, NMissionsToCheckup);
 
-	void Initialize(char* Arr1, char* Arr2, int* Arr3, int* Arr4, int* Arr5, int* Arr6, int* Arr7, ArrQueue<Event> &EventList, int cd1, int s1, PrioQueue<Rover> &Emerg_Rovers, int cd2, int s2, PrioQueue<Rover>& Polar_Rovers) {
+	}
+	//Getting EventList and Rover Queues Ready
+	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr,int* SIG_Arr,  int EventSize, ArrQueue<Event> &EventList,
+		int CheckupDurPol, int SpeedPol, PrioQueue<Rover> & Polar_Rovers, int CheckupDurEmerg, int SpeedEmerg, PrioQueue<Rover>& Emerg_Rovers, int NMissionsToCheckup)
+	{
+		//Initializing Events List
 		for (int i = 0; i < EventSize; i++) {
-			Event E(Arr1[i], Arr2[i], Arr3[i], Arr4[i], Arr5[i], Arr6[i], Arr7[i]);
+			Event E(F_Arr[i], TYP_Arr[i], ED_Arr[i], ID_Arr[i], TLOC_Arr[i], MDUR_Arr[i], SIG_Arr[i]);
 			EventList.enqueue(E);
 		}
+		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
-			Rover R('E', cd1, s1);
-			Emerg_Rovers.add(R);
+			Rover R('E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
+			Emerg_Rovers.dequeue(R);
 		}
+		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {
-			Rover R('P', cd2, s2);
-			Polar_Rovers.add(R);
+			Rover R('P', CheckupDurPol, SpeedPol,NMissionsToCheckup);
+			Polar_Rovers.dequeue(R);
 		}
 	}
 
-	void SimulateDay() {
+	void SimulateDay(int& CurrDay,  ) {
 		Formulate();
 		Execute();
 		Complete();

@@ -14,9 +14,9 @@ private:
 
 	int getParentIndex(int child) { return (child - 1) / 2; }
 	bool hasParent(int index) { return getParentIndex(index) >= 0;} //checks if the parent index isnt negative
-	int getLeftChildIndex(int parent) { return 2(parent + 1); }
+	int getLeftChildIndex(int parent) { return 2*(parent + 1); }
 	bool hasLeftChild(int index) { return getLeftChildIndex(index) < size; }//checks if the left child is within the array
-	int getRightChildIndex(int parent) { return 2(parent + 2); }
+	int getRightChildIndex(int parent) { return 2*(parent + 2); }
 	bool hasRightChild(int index) { return getRightChildIndex(index) < size; }//checks if right child within array
 
 
@@ -30,7 +30,7 @@ private:
 
 	//NOTE: Might need to overload reheap functions with ones that can reheap starting from a certain element in the middle of the array?
 	void reHeapUp() {
-		int index = size - 1; //starts at the last element
+		int index = size -1 ; //starts at the last element
 		while (hasParent(index) && Items[getParentIndex(index)] > Items[index])//checks if this index has a parent && the parent > the item
 		{
 			swap(index, getParentIndex(index));
@@ -69,12 +69,13 @@ public:
 		capacity = Capacity; //assume user enters a capacity above 0
 	}
 	//Returns root element and removes it from queue
-	T poll() {
-		T Item = Items[0];
+	bool dequeue(T &ItemReturned) {
+		if (size == 0) { return false; }
+		ItemReturned = Items[0];
 		Items[0] = Items[size - 1];// exchanges last element with root
 		size--; //shrink array
 		reHeapDown();//fixes queue
-		return Item;
+		return true;
 	}
 	//To view the element at the top without editing it
 	T peek() {
@@ -83,33 +84,26 @@ public:
 	}
 
 	// Adds new item
-	void add(T item) {
-		//check if capacity is full?
+	bool enqueue(T item) {
+		if (size == capacity) { return false; }
 		Items[size] = item; //insert at last 
 		size++;
 		reHeapUp(); //Reorders the item into the heap
+		return true;
 	}
-	//Searches and removes item?? is that legal
-	//void remove(T item) {
-
-	//}
-	//Removes last item
-	T dequeue() {
-		T Item = Items[size];
-		size--;
-		return Item;
-	}
+	
 	bool IsEmpty() {
-		if (size != 0) {
+		if (size == 0) {
 			return true;
 		}
 		return false;
 	}
 
 	void print() {
-		for (int i = 0; i < size; i++)
+		T Item;
+		while (dequeue(Item))
 		{
-			cout << Items[i] << endl;
+			cout << Item << endl;
 		}
 	}
 
