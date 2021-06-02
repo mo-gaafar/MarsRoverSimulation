@@ -18,15 +18,30 @@ private:
 	int PolarRovNum;
 
 	//Main Data Structures
-
+	//_________________________//
+	//---------Rovers----------//
+	
 	//Available Rovers
 	PrioQueue<Rover> Pol_Rover;
 	PrioQueue<Rover> Emerg_Rover;
+
+	//Busy Rovers
+	PrioQueue<Rover> Busy_Rovers;
+	
+	//InCheckup
+	ArrQueue<Rover> InCheckup_Emerg;
+	ArrQueue<Rover> InCheckup_Pol;
+	//____________________________//
+	//----------Missions----------//
+	
 	//Waiting Missions
 	ArrQueue<Mission> PolarWaiting_Mission;
 	PrioQueue<Mission> EmergWaiting_Mission;
+	//Completed Missions
 	LinkedStack<Mission> CompletedMissions;
-
+	//In Execution Missions
+	PrioQueue<Mission> InExecution;
+	
 
 
 public:
