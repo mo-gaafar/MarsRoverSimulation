@@ -60,11 +60,11 @@ public:
 		}
 	}
 
-	void peek(T& value) {
+	T peek() {
 		if (isempty())value = -1;
 		else
 		{
-			value = items[front];
+			return items[front];
 		}
 	}
 };
