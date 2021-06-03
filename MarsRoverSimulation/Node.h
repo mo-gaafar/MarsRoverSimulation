@@ -8,10 +8,12 @@ public:
 	// Node class initializations
 	Node() {
 		next = nullptr;
+		key = 0;
 	}
 	Node(T& iItem) {
 		item = iItem;
 		next = nullptr;
+		key = 0;
 	}
 	Node(T& iItem, int Key) {
 		item = iItem;
@@ -41,5 +43,15 @@ public:
 	}
 	int getKey() {
 		return key;
+	}
+
+	//Operator overloading
+	bool operator>(Node<T>& Other)
+	{
+		return key > Other.key;
+	}
+	bool operator<(Node<T>& Other)
+	{
+		return key < Other.key;
 	}
 };
