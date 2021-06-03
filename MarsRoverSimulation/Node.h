@@ -13,10 +13,11 @@ public:
 		item = iItem;
 		next = nullptr;
 	}
-	Node(T& iItem, Node<T>* nextN) {
+	Node(T& iItem, int Key) {
 		item = iItem;
-		next = nextN;
+		key = Key;
 	}
+	
 
 	//Setters
 	void setItem(T& nItem) {

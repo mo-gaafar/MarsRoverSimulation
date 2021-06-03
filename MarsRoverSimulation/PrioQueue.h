@@ -1,110 +1,121 @@
-#pragma once
-//#include "Node.h"
+// C++ implementation of a priority queue
+
 #include <iostream>
 using namespace std;
-template<class T>
-//Using array heap implementation to save the overhead of a node class
-//This is a MaxHeap, with the largest element at the top
+template <typename T> 
 class PrioQueue {
 private:
-
-	int capacity= 100;//Still Haven't decided on the best capacity
-	int size = 0;
-	T* Items = new T[capacity]; //Dynamically allocated array of elements
-
-	int getParentIndex(int child) { return (child - 1) / 2; }
-	bool hasParent(int index) { return getParentIndex(index) >= 0;} //checks if the parent index isnt negative
-	int getLeftChildIndex(int parent) { return 2*(parent + 1); }
-	bool hasLeftChild(int index) { return getLeftChildIndex(index) < size; }//checks if the left child is within the array
-	int getRightChildIndex(int parent) { return 2*(parent + 2); }
-	bool hasRightChild(int index) { return getRightChildIndex(index) < size; }//checks if right child within array
-
-
-	//NOTE:Is this considered manipulation of pointers?
-	//Swaps elements, given two index values
-	void swap(int Index1, int Index2) {
-		T Temp = Items[Index2];
-		Items[Index2] = Items[Index1];
-		Items[Index1] = Temp;
-	}
-
-	//NOTE: Might need to overload reheap functions with ones that can reheap starting from a certain element in the middle of the array?
-	void reHeapUp() {
-		int index = size -1 ; //starts at the last element
-		while (hasParent(index) && Items[getParentIndex(index)] > Items[index])//checks if this index has a parent && the parent > the item
-		{
-			swap(index, getParentIndex(index));
-			index = getParentIndex(index);
-		}
-
-	}
-
-	//Walking from up to down the heap and fixing
-	void reHeapDown() {
-		int index = 0;
-		while (hasLeftChild(index)) 
-			//no need to check right because if theres no left theres no right
-		{
-			int smallChildIndex = getLeftChildIndex(index);
-			if (hasRightChild(index) && Items[getRightChildIndex(index)] < Items[getLeftChildIndex(index)])
-			{
-				 smallChildIndex = getRightChildIndex(index); //if right child smaller
-			}
-			// now that we found the smallest child if the parent index is smaller do nothing
-			//if the parent index is larger then swap
-			if (Items[index] < Items[smallChildIndex]) {
-				break;
-			}
-			else {
-				swap(index, smallChildIndex);
-			}
-			index = smallChildIndex;// move down
-		}
-	}
+    const static int MAX_SIZE = 15;
+    T heap[MAX_SIZE];
+    int size = 0;
 
 public:
-	PrioQueue<T>(int Capacity = 100)
-		//Constructor with certain capacity
-	{
-		capacity = Capacity; //assume user enters a capacity above 0
-	}
-	//Returns root element and removes it from queue
-	bool dequeue(T &ItemReturned) {
-		if (size == 0) { return false; }
-		ItemReturned = Items[0];
-		Items[0] = Items[size - 1];// exchanges last element with root
-		size--; //shrink array
-		reHeapDown();//fixes queue
-		return true;
-	}
-	//To view the element at the top without editing it
-	T peek() {
-		if (size == 0) { return NULL; }
-		return Items[0]; // Returns first element
-	}
+    PrioQueue() {
+        size = 0;
+    }
 
-	// Adds new item
-	bool enqueue(T item) {
-		if (size == capacity) { return false; }
-		Items[size] = item; //insert at last 
-		size++;
-		reHeapUp(); //Reorders the item into the heap
-		return true;
-	}
-	
-	bool IsEmpty() {
-		if (size == 0) {
-			return true;
-		}
-		return false;
-	}
+    // returns the index of the parent node
+    static int parent(int i) {
+        return (i - 1) / 2;
+    }
 
-	void print() {
-		T Item;
-		while (dequeue(Item))
-		{
-			cout << Item << endl;
-		}
-	}
+    // return the index of the left child 
+    static int leftChild(int i) {
+        return 2 * i + 1;
+    }
 
+    // return the index of the right child 
+    static int rightChild(int i) {
+        return 2 * i + 2;
+    }
+
+
+    static void swap(T* x, T* y) {
+        T temp = *x;
+        *x = *y;
+        *y = temp;
+    }
+
+    // insert the item at the appropriate position
+    void enqueue(T data) {
+        if (size >= MAX_SIZE) {
+            cout << "The heap is full. Cannot insert" << endl;
+            return;
+        }
+
+        // first insert the time at the last position of the array 
+        // and move it up
+        heap[size] = data;
+        size = size + 1;
+
+
+        // move up until the heap property satisfies
+        int i = size - 1;
+        while (i != 0 && heap[parent(i)] < heap[i]) {
+            swap(&heap[parent(i)], &heap[i]);
+            i = parent(i);
+        }
+    }
+
+    // moves the item at position i of array a
+    // into its appropriate position
+    void maxHeapify(int i) {
+        // find left child node
+        int left = leftChild(i);
+
+        // find right child node
+        int right = rightChild(i);
+
+        // find the largest among 3 nodes
+        int largest = i;
+
+        // check if the left node is larger than the current node
+        if (left <= size && heap[left] > heap[largest]) {
+            largest = left;
+        }
+
+        // check if the right node is larger than the current node 
+        // and left node
+        if (right <= size && heap[right] > heap[largest]) {
+            largest = right;
+        }
+
+        // swap the largest node with the current node 
+        // and repeat this process until the current node is larger than 
+        // the right and the left node
+        if (largest != i) {
+            int temp = heap[i];
+            heap[i] = heap[largest];
+            heap[largest] = temp;
+            maxHeapify(largest);
+        }
+
+    }
+
+    // returns the  maximum item of the heap
+    int peek() {
+        return heap[0];
+    }
+
+    // deletes the max item and return
+    int dequeue() {
+        int maxItem = heap[0];
+
+        // replace the first item with the last item
+        heap[0] = heap[size - 1];
+        size = size - 1;
+
+        // maintain the heap property by heapifying the 
+        // first item
+        maxHeapify(0);
+        return maxItem;
+    }
+
+    // prints the heap
+    void printQueue() {
+        for (int i = 0; i < size; i++) {
+            cout << heap[i] <<endl;
+        }
+        cout << endl;
+    }
 };

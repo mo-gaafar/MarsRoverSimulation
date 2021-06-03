@@ -6,6 +6,8 @@ private:
 	int targetLoc;
 	int missionDur;
 	int sig;
+
+	
 public:
 	Mission(int f, char mt, int tl, int md, int s); //Initialization
 
@@ -17,6 +19,16 @@ public:
 	int getSIG() { return sig; }
 
 	void setTYP(char in) { missionType = in; } //In case of promotion
+
+	//overloading comparative operator
+	bool operator <= (Mission const& obj)
+	{
+		return sig >= obj.sig;
+	}
+	bool operator >= (Mission const& obj)
+	{
+		return sig <= obj.sig;
+	}
 
 	~Mission() {}
 };
