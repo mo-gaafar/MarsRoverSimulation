@@ -95,8 +95,11 @@ public:
     }
 
     // returns the  maximum item of the heap
-    int peek() {
-        return PrioQ[0];
+    T peek() {
+        if (size)
+            return PrioQ[0].getItem();
+        else
+            return nullptr;
     }
 
     // deletes the max item and return
