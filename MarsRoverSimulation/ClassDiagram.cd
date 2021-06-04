@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Comment CommentText="Data Structures&#xD;&#xA;">
+    <Position X="9.104" Y="0.5" Height="0.542" Width="1.158" />
+  </Comment>
+  <Class Name="Event">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAAAAoATIEAQAAAAAAgAACAAAAUAAAAAAAAA=</HashCode>
+      <FileName>Event.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Node&lt;T&gt;">
+    <Position X="11.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEQAAAAAAABAQEAAAAAAAAAAAAIAACAAMAQAA=</HashCode>
+      <FileName>Node.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rover">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgCAIAAAAAAAAIAACAAAAQABAAAAAAAAQAA=</HashCode>
+      <FileName>Rover.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinkedList&lt;T&gt;">
+    <Position X="10" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAIAAAAAAhAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LinkedList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArrayList&lt;T&gt;">
+    <Position X="8" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAADAqAAAAAAAAIAAAAAAAAAAEEAAA=</HashCode>
+      <FileName>ArrayList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
