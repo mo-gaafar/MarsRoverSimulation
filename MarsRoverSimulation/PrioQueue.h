@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Node.h"
 using namespace std;
-template <typename T> 
+template <class T> 
 class PrioQueue {
 private:
     const static int Capacity = 100;
@@ -95,11 +95,18 @@ public:
     }
 
     // returns the  maximum item of the heap
-    T peek() {
+    T peek(int &key) {
         if (size)
+            key = PrioQ[0].getKey();
             return PrioQ[0].getItem();
         else
             return nullptr;
+    }
+
+    bool isEmpty() {
+        if (size)
+            return false;
+        return true;
     }
 
     // deletes the max item and return
@@ -137,6 +144,25 @@ public:
         reHeap(0);
         return true;
     }
+
+    T dequeue(int &Key) {
+        if (size == 0)
+            return false;
+
+        T maxItem;
+        maxItem = PrioQ[0].getItem();
+        Key = PrioQ[0].getKey();
+
+        // replace the first item with the last item
+        PrioQ[0] = PrioQ[size - 1];
+        size = size - 1;
+
+        // maintain the heap property by heapifying the 
+        // first item
+        reHeap(0);
+        return maxItem;
+    }
+
 
     // prints the heap
     void printQueue() {
