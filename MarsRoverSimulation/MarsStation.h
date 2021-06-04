@@ -48,8 +48,8 @@ public:
 	MarsStation() {
 		day = 0;
 		ArrQueue<Event> EventList(EventSize);
-		PrioQueue<Rover> Emerg_Rovers(EmergRovNum);
-		PrioQueue<Rover> Polar_Rovers(PolarRovNum);
+		PrioQueue<Rover> Emerg_Rovers;
+		PrioQueue<Rover> Polar_Rovers;
 		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
 			Polar_Rovers, CheckupDurEmerg, SpeedEmerg, Emerg_Rovers, NMissionsToCheckup);
 
@@ -80,7 +80,7 @@ public:
 	
 	//
 
-	void SimulateDay(int& CurrDay,  ) {
+	void SimulateDay(int& CurrDay) {
 		Formulate();
 		Execute();
 		Complete();

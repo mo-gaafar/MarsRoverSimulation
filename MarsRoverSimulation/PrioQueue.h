@@ -6,8 +6,8 @@ using namespace std;
 template <typename T> 
 class PrioQueue {
 private:
-    const static int MAX_SIZE = 100;
-    Node<T> heap[MAX_SIZE]; //Initialize an array of nodes
+    const static int Capacity = 100;
+    Node<T> PrioQ[Capacity]; //Initialize an array of nodes
     int size = 0;
 
 public:
@@ -39,29 +39,29 @@ public:
 
     // insert the item at the appropriate position
     void enqueue(T data,int key) {
-        if (size >= MAX_SIZE) {
+        if (size >= Capacity) {
             cout << "The heap is full. Cannot insert" << endl;
             return;
         }
 
         // first insert the time at the last position of the array 
         // and move it up
-        heap[size].setItem(data);
-        heap[size].setKey(key);
-        size = size + 1;
+        PrioQ[size].setItem(data);
+        PrioQ[size].setKey(key);
+        size++ ;
 
 
         // move up until the heap property satisfies
         int i = size - 1;
-        while (i != 0 && heap[parent(i)] > heap[i]) {
-            swap(&heap[parent(i)], &heap[i]);
+        while (i != 0 && PrioQ[parent(i)] > PrioQ[i]) {
+            swap(&PrioQ[parent(i)], &PrioQ[i]);
             i = parent(i);
         }
     }
 
     // moves the item at position i of array a
     // into its appropriate position
-    void maxHeapify(int i) {
+    void reHeap(int i) {
         // find left child node
         int left = leftChild(i);
 
@@ -69,34 +69,34 @@ public:
         int right = rightChild(i);
 
         // find the largest among 3 nodes
-        int largest = i;
+        int smallest = i;
 
         // check if the left node is larger than the current node
-        if (left <= size && heap[left] < heap[largest]) {
-            largest = left;
+        if (left <= size && PrioQ[left] < PrioQ[smallest]) {
+            smallest = left;
         }
 
         // check if the right node is larger than the current node 
         // and left node
-        if (right <= size && heap[right] < heap[largest]) {
-            largest = right;
+        if (right <= size && PrioQ[right] < PrioQ[smallest]) {
+            smallest = right;
         }
 
         // swap the largest node with the current node 
         // and repeat this process until the current node is larger than 
         // the right and the left node
-        if (largest != i) {
-            Node<T> temp = heap[i];
-            heap[i] = heap[largest];
-            heap[largest] = temp;
-            maxHeapify(largest);
+        if (smallest != i) {
+            Node<T> temp = PrioQ[i];
+            PrioQ[i] = PrioQ[smallest];
+            PrioQ[smallest] = temp;
+            reHeap(smallest);
         }
 
     }
 
     // returns the  maximum item of the heap
     int peek() {
-        return heap[0];
+        return PrioQ[0];
     }
 
     // deletes the max item and return
@@ -104,16 +104,16 @@ public:
         if (size == 0)
             return false;
 
-        maxItem = heap[0].getItem();
+        maxItem = PrioQ[0].getItem();
         
 
         // replace the first item with the last item
-        heap[0] = heap[size - 1];
-        size = size - 1;
+        PrioQ[0] = PrioQ[size - 1];
+        size-- ;
 
         // maintain the heap property by heapifying the 
         // first item
-        maxHeapify(0);
+        reHeap(0);
         return true;
     }
 
@@ -122,16 +122,16 @@ public:
         if (size == 0)
             return false;
 
-        maxItem = heap[0].getItem();
-        Key = heap[0].getKey();
+        maxItem = PrioQ[0].getItem();
+        Key = PrioQ[0].getKey();
 
         // replace the first item with the last item
-        heap[0] = heap[size - 1];
+        PrioQ[0] = PrioQ[size - 1];
         size = size - 1;
 
         // maintain the heap property by heapifying the 
         // first item
-        maxHeapify(0);
+        reHeap(0);
         return true;
     }
 
