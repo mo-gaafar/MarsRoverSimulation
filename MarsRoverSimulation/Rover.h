@@ -8,6 +8,7 @@ private:
 	int inCheckDays;
 	int inMaintenanceDay;
 	int missionNo;
+	int ID;
 public:
 	Rover(char t, int cd, int s, int cmn); //Initialiaztion
 	Rover(Rover& r) {
@@ -52,8 +53,10 @@ public:
 	void setInCheckDays(int in) { inCheckDays = in; }
 	void setinMaintenanceDay(int in) { inMaintenanceDay = in; }
 	void incrementMissions() { missionNo++; }
+	int getID() { return ID; }
 
 	void setCheckupMissionNo(int in) { checkupMissionNo = in; }
+	void setID(int id) { ID = id; }
 
 	~Rover() {}
 };

@@ -6,6 +6,7 @@ private:
 	int targetLoc;
 	int missionDur;
 	int sig;
+	int ID;
 
 	
 public:
@@ -41,8 +42,10 @@ public:
 	int getTLOC() { return targetLoc; }
 	int getMDUR() { return missionDur; }
 	int getSIG() { return sig; }
+	int getID() { return ID; }
 
 	void setTYP(char in) { missionType = in; } //In case of promotion
+	void setID(int id) { ID = id; }
 
 	//overloading comparative operator
 	bool operator <= (Mission const& obj)

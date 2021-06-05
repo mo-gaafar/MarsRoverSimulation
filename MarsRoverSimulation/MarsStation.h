@@ -107,6 +107,20 @@ public:
 	bool MaintenanceCheck(Rover &r);
 	void Maintenance();
 
+
+
+	//   GETTERS FOR UI   //
+	int GetDay();
+	ArrQueue<Mission> GetPolarWaiting_Mission();
+	PrioQueue<Mission> GetEmergWaiting_Mission();
+	void GetBusy_Rovers(PrioQueue<Rover>& Emerg, PrioQueue<Rover>& Polar);
+	void GetInExecution(PrioQueue<Mission>& Emerg, PrioQueue<Mission>& Polar);
+	PrioQueue<Rover> GetAvailablePol_Rover();
+	PrioQueue<Rover> GetAvailableEmerg_Rover();
+	ArrQueue<Rover> GetInCheckup_Emerg();
+	ArrQueue<Rover> GetInCheckup_Pol();
+	void GetCompletedMissions(ArrQueue<Mission>& Emerg, ArrQueue<Mission>& Polar);
+
 };
 
 
@@ -247,5 +261,87 @@ void MarsStation::Maintenance() {
 			else if (type == 'E')
 				Emerg_Rover.enqueue(R, R.getSpeed());
 		}
+	}
+}
+
+
+
+
+
+
+//    GETTERS    //
+
+int MarsStation::GetDay()
+{
+	return day;
+}
+
+
+ArrQueue<Mission> MarsStation::GetPolarWaiting_Mission()
+{
+	return PolarWaiting_Mission;
+}
+
+
+PrioQueue<Mission> MarsStation::GetEmergWaiting_Mission()
+{
+	return EmergWaiting_Mission;
+}
+
+void MarsStation::GetBusy_Rovers(PrioQueue<Rover>& E, PrioQueue<Rover>& P)
+{
+	Rover Item;
+	int Key;
+	while (Busy_Rovers.dequeue(Item, Key))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item, Key);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item, Key);
+	}
+}
+
+void MarsStation::GetInExecution(PrioQueue<Mission>& E, PrioQueue<Mission>& P)  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
+{
+	Mission Item;
+	int Key;
+	while (InExecution.dequeue(Item, Key))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item, Key);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item, Key);
+	}
+}
+
+PrioQueue<Rover> MarsStation::GetAvailablePol_Rover()
+{
+	return Pol_Rover;
+}
+PrioQueue<Rover> MarsStation::GetAvailableEmerg_Rover()
+{
+	return Emerg_Rover;
+}
+
+ArrQueue<Rover> MarsStation::GetInCheckup_Emerg()
+{
+	return InCheckup_Emerg;
+}
+
+ArrQueue<Rover> MarsStation::GetInCheckup_Pol()
+{
+	return InCheckup_Pol;
+}
+
+void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& P)
+{
+	Mission Item;
+	int Key;
+	while (InExecution.dequeue(Item))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item);
 	}
 }
