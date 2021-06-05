@@ -9,7 +9,7 @@ private:
 	int ID;
 public:
 	Mission(int f, char mt, int tl, int md, int s); //Initialization
-	Mission(Mission &m) {  //Copy constructor
+	Mission(Mission const &m) {  //Copy constructor
 		formulationDay = m.getFD();
 		missionType = m.getTYP();
 		targetLoc = m.getTLOC();
@@ -35,12 +35,12 @@ public:
 	}
 
 	//GETTERS
-	int getFD() { return formulationDay; }
-	char getTYP() { return missionType; }
-	int getTLOC() { return targetLoc; }
-	int getMDUR() { return missionDur; }
-	int getSIG() { return sig; }
-	int getID() { return ID; }
+	int getFD()const { return formulationDay; }
+	char getTYP() const { return missionType; }
+	int getTLOC() const{ return targetLoc; }
+	int getMDUR() const{ return missionDur; }
+	int getSIG() const{ return sig; }
+	int getID() const { return ID; }
 
 	void setTYP(char in) { missionType = in; } //In case of promotion
 	void setID(int id) { ID = id; }

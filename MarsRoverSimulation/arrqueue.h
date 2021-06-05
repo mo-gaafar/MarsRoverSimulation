@@ -52,7 +52,7 @@ public:
 	T dequeue() {
 		if (isempty()) 
 		{
-			return false;
+			//return false;
 			
 		}
 		else {
@@ -60,12 +60,12 @@ public:
 			if (front == rear) {
 				item = items[front];
 				front = rear = -1;
-				return &item;
+				return item;
 			}
 			else {
 				item = items[front];
 				front++;
-				return &item;
+				return item;
 			}
 		}
 

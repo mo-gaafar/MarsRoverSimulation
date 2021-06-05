@@ -11,7 +11,7 @@ private:
 	int ID;
 public:
 	Rover(char t, int cd, int s, int cmn); //Initialiaztion
-	Rover(Rover& r) {
+	Rover(Rover const & r) {
 		roverType = r.getTYP();
 		checkupDur = r.getCDUR();
 		checkupMissionNo = r.getCheckupMissionNo();
@@ -44,13 +44,13 @@ public:
 	}
 
 	//GETTERS
-	char getTYP() { return roverType; }
-	int getCDUR() { return checkupDur; }
-	int getSpeed() { return speed; }
-	int getCheckupMissionNo() { return checkupMissionNo; }
-	int getInCheckDays() { return inCheckDays; }
-	int getMissionNO() { return missionNo; }
-	int getinMaintenanceDay() { return inMaintenanceDay; }
+	char getTYP() const{ return roverType; }
+	int getCDUR() const { return checkupDur; }
+	int getSpeed() const{ return speed; }
+	int getCheckupMissionNo() const { return checkupMissionNo; }
+	int getInCheckDays() const{ return inCheckDays; }
+	int getMissionNO() const{ return missionNo; }
+	int getinMaintenanceDay() const { return inMaintenanceDay; }
 	void setInCheckDays(int in) { inCheckDays = in; }
 	void setinMaintenanceDay(int in) { inMaintenanceDay = in; }
 	void incrementMissions() { missionNo++; }

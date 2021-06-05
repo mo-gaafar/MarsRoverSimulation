@@ -54,7 +54,10 @@ int main() {
 	MarsStation TestStation(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize,
 		CheckupDurPol, SpeedPol, CheckupDurEmerg,SpeedEmerg, NMissionsToCheckup,
 		EmergRovNum,PolarRovNum);
-	
+	for (int i = 0; i < 2; i++)
+	{
+		TestStation.SimulateDay(EventList);
+	}
 
 
 }
