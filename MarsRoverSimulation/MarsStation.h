@@ -50,24 +50,25 @@ private:
 
 public:
 	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
-		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup) {
+		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup, int EmergRovNum, int PolarRovNum) {
 		day = 0;
 		EventSize = EventSizein;
-
-		/*char* F_Arr,char* TYP_Arr;
-		int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr;
-
-		int CheckupDurPol, SpeedPol, CheckupDurEmerg, SpeedEmerg;*/
+		this->EmergRovNum = EmergRovNum;
+		this-> PolarRovNum = PolarRovNum;
+		this->NMissionsToCheckup = NMissionsToCheckup;
 
 		ArrQueue<Event> EventList(EventSize);
-		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
+		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventList, CheckupDurPol, SpeedPol,
 			Pol_Rover, CheckupDurEmerg, SpeedEmerg, Emerg_Rover, NMissionsToCheckup);
 
 	}
 	
 	//Getting EventList and Rover Queues Ready
-	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr,int* SIG_Arr, ArrQueue<Event> &EventList,
-		int CheckupDurPol, int SpeedPol, PrioQueue<Rover> & Polar_Rovers, int CheckupDurEmerg, int SpeedEmerg, PrioQueue<Rover>& Emerg_Rovers, int NMissionsToCheckup)
+	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, 
+		int* MDUR_Arr,int* SIG_Arr, ArrQueue<Event> &EventList,
+		int CheckupDurPol, int SpeedPol, PrioQueue<Rover> & Polar_Rovers,
+		int CheckupDurEmerg, int SpeedEmerg, PrioQueue<Rover>& Emerg_Rovers, 
+		int NMissionsToCheckup)
 	{
 		//Initializing Events List
 		for (int i = 0; i < EventSize; i++) {
@@ -134,7 +135,8 @@ void MarsStation::Formulate(ArrQueue<Event> &EventList) {
 			}
 			else if(EventList.peek().getET() ==  'E'){
 				Mission M(EventList.peek().getED(), 'E', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
-				EmergWaiting_Mission.enqueue(M, M.getSIG());
+				int Priority = M.getSIG();
+				EmergWaiting_Mission.enqueue(M, Priority);
 			}
 		}
 		else {
@@ -148,12 +150,15 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		if (!Pol_Rover.isEmpty()) {
+			int Priority;
 			Mission M;
 			M = PolarWaiting_Mission.dequeue();
-			InExecution.enqueue(M, day + M.getMDUR());
+			Priority = day + M.getMDUR();
+			InExecution.enqueue(M, Priority);
 			Rover R;
 			R = Pol_Rover.dequeue(key);
-			Busy_Rovers.enqueue(R, day + M.getMDUR());
+			Priority = day + M.getMDUR();
+			Busy_Rovers.enqueue(R, Priority);
 		}
 		else
 			check = false;
@@ -161,12 +166,15 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		if (!Emerg_Rover.isEmpty()) {
+			int Priority;
 			Mission M;
 			M = EmergWaiting_Mission.dequeue(key);
-			InExecution.enqueue(M, day + M.getMDUR());
+			Priority = day + M.getMDUR();
+			InExecution.enqueue(M, Priority);
 			Rover R;
 			R = Emerg_Rover.dequeue(key);
-			Busy_Rovers.enqueue(R, day + M.getMDUR());
+			Priority = day + M.getMDUR();
+			Busy_Rovers.enqueue(R, Priority);
 		}
 		else {
 			check = false;
@@ -180,6 +188,7 @@ void MarsStation::Complete() {
 	while (check) {
 		InExecution.peek(key);
 		if (key == day) {
+			int Priority; //Define Priority variable
 			Mission M;
 			M = InExecution.dequeue(key);
 			CompletedMissions.enqueue(M);
@@ -190,9 +199,17 @@ void MarsStation::Complete() {
 				R.incrementMissions();
 				char type = R.getTYP();
 				if (type == 'P')
-					Pol_Rover.enqueue(R, R.getSpeed());
-				else if (type == 'E')
-					Emerg_Rover.enqueue(R, R.getSpeed());
+				{
+					Priority = R.getSpeed();
+					Pol_Rover.enqueue(R, Priority);
+				}
+				else {
+					if (type == 'E')
+					{
+					Priority = R.getSpeed();//Calculate Priority
+					Emerg_Rover.enqueue(R, Priority);
+					}
+				}
 			}
 		}
 	}
@@ -200,13 +217,16 @@ void MarsStation::Complete() {
 
 bool MarsStation::CheckUpCheck(Rover &r) {
 	if (r.getMissionNO() == NMissionsToCheckup) {
+		int CheckDays;
 		char type = r.getTYP();
 		if (type == 'P') {
-			r.setInCheckDays(day + r.getCDUR());
+			CheckDays = day + r.getCDUR();
+			r.setInCheckDays(CheckDays);
 			InCheckup_Pol.enqueue(r);
 		}
 		else if (type == 'E') {
-			r.setInCheckDays(day + r.getCDUR());
+			CheckDays = day + r.getCDUR();
+			r.setInCheckDays(CheckDays);
 			InCheckup_Emerg.enqueue(r);
 		}
 		return false;
@@ -217,12 +237,14 @@ bool MarsStation::CheckUpCheck(Rover &r) {
 void MarsStation::CheckUp() {
 	bool check = true;
 	while (check) {
+		int Priority;
 		if (InCheckup_Pol.peek().getInCheckDays() == day) {
 			Rover R;
 			R = InCheckup_Pol.dequeue();
 			MaintenanceCheck(R);
 			R.setInCheckDays(-1);
-			Pol_Rover.enqueue(R, R.getSpeed());
+			Priority = R.getSpeed();
+			Pol_Rover.enqueue(R, Priority);
 		}
 		if (InCheckup_Emerg.peek().getInCheckDays() == day) {
 			Rover R;
@@ -230,7 +252,8 @@ void MarsStation::CheckUp() {
 			bool check2 = MaintenanceCheck(R);
 			if (check2) {
 				R.setInCheckDays(-1);
-				Emerg_Rover.enqueue(R, R.getSpeed());
+				Priority = R.getSpeed();
+				Emerg_Rover.enqueue(R, Priority);
 			}
 		}
 	}
@@ -239,8 +262,9 @@ void MarsStation::CheckUp() {
 bool MarsStation::MaintenanceCheck(Rover &r) {
 	int prob = rand() % 9;
 	if (prob <= 4) {
-		r.setinMaintenanceDay(day + (1 + rand() % 20));
-		InMaintenance.enqueue(r, r.getinMaintenanceDay());
+		int RandominMaintenanceDay = day + (1 + rand() % 20);
+		r.setinMaintenanceDay(RandominMaintenanceDay);
+		InMaintenance.enqueue(r, RandominMaintenanceDay);
 		return false;
 	} 
 	return true;
@@ -252,20 +276,27 @@ void MarsStation::Maintenance() {
 	while (check) {
 		if (InMaintenance.peek(key).getinMaintenanceDay() == day) {
 			Rover R;
+			int Priority;
 			R = InMaintenance.dequeue(key);
 			R.setInCheckDays(-1);
 			R.setinMaintenanceDay(-1);
 			char type = R.getTYP();
 			if (type == 'P')
-				Pol_Rover.enqueue(R, R.getSpeed());
-			else if (type == 'E')
-				Emerg_Rover.enqueue(R, R.getSpeed());
+			{
+				Priority = R.getSpeed();
+				Pol_Rover.enqueue(R, Priority);
+			}
+			else 
+			{
+				if (type == 'E')
+				{
+					Priority = R.getSpeed();
+					Emerg_Rover.enqueue(R, Priority);
+				}
+			}
 		}
 	}
 }
-
-
-
 
 
 
@@ -336,7 +367,7 @@ ArrQueue<Rover> MarsStation::GetInCheckup_Pol()
 void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& P)
 {
 	Mission Item;
-	int Key;
+	//int Key;
 	while (InExecution.dequeue(Item))
 	{
 		if (Item.getTYP() == 'E')

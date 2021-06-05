@@ -1,7 +1,8 @@
-// C++ implementation of a priority queue
+#pragma once
 
 #include <iostream>
 #include "Node.h"
+#include "Mission.h"
 using namespace std;
 template <class T> 
 class PrioQueue {
@@ -38,7 +39,7 @@ public:
     }
 
     // insert the item at the appropriate position
-    void enqueue(T data,int key) {
+    void enqueue(T &data,int &key) {
         if (size >= Capacity) {
             cout << "The heap is full. Cannot insert" << endl;
             return;
@@ -95,12 +96,26 @@ public:
     }
 
     // returns the  maximum item of the heap
+    T peek() {
+        if (size)
+        {
+            //key = PrioQ[0].getKey();
+            T Item = PrioQ[0].getItem();
+            return Item;
+        }
+        /*else {
+            return nullptr;
+        }*/
+    }
     T peek(int &key) {
         if (size)
+        {
             key = PrioQ[0].getKey();
             return PrioQ[0].getItem();
-        else
+        }
+        /*else {
             return nullptr;
+        }*/
     }
 
     bool isEmpty() {
@@ -146,8 +161,8 @@ public:
     }
 
     T dequeue(int &Key) {
-        if (size == 0)
-            return false;
+       /* if (size == 0)
+            return false;*/
 
         T maxItem;
         maxItem = PrioQ[0].getItem();
@@ -177,5 +192,7 @@ public:
         cout << endl;
     }
 
-   
+
+  
+
 };

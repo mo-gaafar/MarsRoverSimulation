@@ -2,9 +2,17 @@
 //#include"MarsStation.h"
 #include "PrioQueue.h"
 #include "MarsStation.h"
+#include "ArrayList.h"
 int main() {
-	int EventSize = 9, ArrQueue<Event> EventList;
-	char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr;
+	int EventSize = 9;
+	ArrQueue<Event> EventList;
+	char F_Arr[9];
+	char TYP_Arr[9];
+	int ED_Arr[9];
+	int ID_Arr[9];
+	int TLOC_Arr[9];
+	int MDUR_Arr[9];
+	int SIG_Arr[9];
 
 	int EventArrInput[9][7] =
 	{
@@ -30,16 +38,23 @@ int main() {
 		SIG_Arr[i] = EventArrInput[i][6];
 	}
 	
+	int EmergRovNum = 5;
+	int PolarRovNum = 4;
 
-	int CheckupDurPol = 3, int SpeedPol = 10;
+
+	int CheckupDurPol = 3;
+	int SpeedPol = 10;
 	PrioQueue<Rover> Polar_Rovers;
-	int CheckupDurEmerg = 2, int SpeedEmerg = 12;
+	int CheckupDurEmerg = 2;
+	int SpeedEmerg = 12;
 	PrioQueue<Rover> Emerg_Rovers;
 	int NMissionsToCheckup = 2;
 
 	//Constructing the mars station
-	MarsStation TestStation(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList,
-		CheckupDurPol, SpeedPol, Polar_Rovers, CheckupDurEmerg,SpeedEmerg, Emerg_Rovers, NMissionsToCheckup);
+	MarsStation TestStation(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize,
+		CheckupDurPol, SpeedPol, CheckupDurEmerg,SpeedEmerg, NMissionsToCheckup,
+		EmergRovNum,PolarRovNum);
+	
 
 
 }

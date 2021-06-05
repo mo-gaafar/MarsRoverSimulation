@@ -20,6 +20,7 @@ public:
 		missionNo = r.getMissionNO();
 		inMaintenanceDay = r.getinMaintenanceDay();
 	}
+	
 	Rover() {
 		roverType = '.';
 		checkupDur = 0;

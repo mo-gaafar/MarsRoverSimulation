@@ -1,4 +1,5 @@
-template <class T>
+#pragma once
+template <typename T>
 class Node {
 private:
 	T item;
