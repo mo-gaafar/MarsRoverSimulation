@@ -49,8 +49,16 @@ private:
 
 
 public:
-	MarsStation() {
+	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
+		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup) {
 		day = 0;
+		EventSize = EventSizein;
+
+		/*char* F_Arr,char* TYP_Arr;
+		int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr;
+
+		int CheckupDurPol, SpeedPol, CheckupDurEmerg, SpeedEmerg;*/
+
 		ArrQueue<Event> EventList(EventSize);
 		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
 			Pol_Rover, CheckupDurEmerg, SpeedEmerg, Emerg_Rover, NMissionsToCheckup);
@@ -58,7 +66,7 @@ public:
 	}
 	
 	//Getting EventList and Rover Queues Ready
-	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr,int* SIG_Arr,  int EventSize, ArrQueue<Event> &EventList,
+	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr,int* SIG_Arr, ArrQueue<Event> &EventList,
 		int CheckupDurPol, int SpeedPol, PrioQueue<Rover> & Polar_Rovers, int CheckupDurEmerg, int SpeedEmerg, PrioQueue<Rover>& Emerg_Rovers, int NMissionsToCheckup)
 	{
 		//Initializing Events List
