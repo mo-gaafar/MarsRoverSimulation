@@ -65,6 +65,26 @@ public:
 		}
 	}
 
+
+	bool dequeue(T& Item) {
+		if (isempty())return false;
+		T item;
+		else if (front == rear) {
+			item = items[front];
+			front = rear = -1;
+			Item = item;
+			return true;
+
+		}
+		else {
+			item = items[front];
+			front++;
+			Item = item;
+			return true;
+		}
+	}
+
+
 	T peek() {
 		if (isempty())value = -1;
 		else
@@ -72,5 +92,6 @@ public:
 			return items[front];
 		}
 	}
+
 };
 

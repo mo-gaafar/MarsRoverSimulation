@@ -99,6 +99,16 @@ public:
 	bool MaintenanceCheck(Rover &r);
 	void Maintenance();
 
+
+
+	//   GETTERS FOR UI   //
+	int GetDay();
+	ArrQueue<Mission> GetPolarWaiting_Mission();
+	PrioQueue<Mission> GetEmergWaiting_Mission();
+	void GetBusy_Rovers(PrioQueue<Rover>& Emerg, PrioQueue<Rover>& Polar);
+
+	void GetInExecution(PrioQueue<Mission>& Emerg, PrioQueue<Mission>& Polar);
+
 };
 
 
@@ -241,3 +251,54 @@ void MarsStation::Maintenance() {
 		}
 	}
 }
+
+
+
+
+
+
+//    GETTERS    //
+
+int MarsStation::GetDay()
+{
+	return day;
+}
+
+
+ArrQueue<Mission> MarsStation::GetPolarWaiting_Mission()
+{
+	return PolarWaiting_Mission;
+}
+
+
+PrioQueue<Mission> MarsStation::GetEmergWaiting_Mission()
+{
+	return EmergWaiting_Mission;
+}
+
+void MarsStation::GetBusy_Rovers(PrioQueue<Rover>& E, PrioQueue<Rover>& P)
+{
+	Rover Item;
+	int Key;
+	while (Busy_Rovers.dequeue(Item, Key))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item, Key);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item, Key);
+	}
+}
+
+void MarsStation::GetInExecution(PrioQueue<Mission>& E, PrioQueue<Mission>& P)  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
+{
+	Mission Item;
+	int Key;
+	while (InExecution.dequeue(Item, Key))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item, Key);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item, Key);
+	}
+}
+
