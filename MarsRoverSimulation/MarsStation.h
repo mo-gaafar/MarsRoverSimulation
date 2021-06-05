@@ -106,8 +106,12 @@ public:
 	ArrQueue<Mission> GetPolarWaiting_Mission();
 	PrioQueue<Mission> GetEmergWaiting_Mission();
 	void GetBusy_Rovers(PrioQueue<Rover>& Emerg, PrioQueue<Rover>& Polar);
-
 	void GetInExecution(PrioQueue<Mission>& Emerg, PrioQueue<Mission>& Polar);
+	PrioQueue<Rover> GetAvailablePol_Rover();
+	PrioQueue<Rover> GetAvailableEmerg_Rover();
+	ArrQueue<Rover> GetInCheckup_Emerg();
+	ArrQueue<Rover> GetInCheckup_Pol();
+	void GetCompletedMissions(ArrQueue<Mission>& Emerg, ArrQueue<Mission>& Polar);
 
 };
 
@@ -302,3 +306,34 @@ void MarsStation::GetInExecution(PrioQueue<Mission>& E, PrioQueue<Mission>& P)  
 	}
 }
 
+PrioQueue<Rover> MarsStation::GetAvailablePol_Rover()
+{
+	return Pol_Rover;
+}
+PrioQueue<Rover> MarsStation::GetAvailableEmerg_Rover()
+{
+	return Emerg_Rover;
+}
+
+ArrQueue<Rover> MarsStation::GetInCheckup_Emerg()
+{
+	return InCheckup_Emerg;
+}
+
+ArrQueue<Rover> MarsStation::GetInCheckup_Pol()
+{
+	return InCheckup_Pol;
+}
+
+void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& P)
+{
+	Mission Item;
+	int Key;
+	while (InExecution.dequeue(Item))
+	{
+		if (Item.getTYP() == 'E')
+			E.enqueue(Item);
+		else if (Item.getTYP() == 'P')
+			P.enqueue(Item);
+	}
+}

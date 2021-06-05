@@ -17,9 +17,18 @@ private:
 	PrioQueue<Mission> InExecutionPolar;
 	PrioQueue<Rover> Busy_RoversEmerg;
 	PrioQueue<Rover> Busy_RoversPolar;
+	PrioQueue<Rover> AvailablePol_Rover;
+	PrioQueue<Rover> AvailableEmerg_Rover;
+	ArrQueue<Rover> InCheckup_Emerg;
+	ArrQueue<Rover> InCheckup_Pol;
+	ArrQueue<Mission> CompletedEmerg;
+	ArrQueue<Mission> CompletedPolar;
 
 	int NumberOfWaiting;
 	int NumberOfInExecution;
+	int NumberOfAvailable;
+	int NumberOfInCheckup;
+	int NumberOfCompleted;
 public:
 	UI(MarsStation& InputStation)
 	{
@@ -28,7 +37,17 @@ public:
 		EmergWaiting_Mission = InputStation.GetEmergWaiting_Mission();
 		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
 		InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
+		AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
+		AvailablePol_Rover = InputStation.GetAvailablePol_Rover();
+		InCheckup_Emerg = InputStation.GetInCheckup_Emerg();
+		InCheckup_Pol = InputStation.GetInCheckup_Pol();
+		InputStation.GetCompletedMissions(CompletedEmerg, CompletedPolar);
+
 		NumberOfWaiting = 0;
+		NumberOfInExecution = 0;
+		NumberOfAvailable = 0;
+		NumberOfInCheckup = 0;
+		NumberOfCompleted = o;
 	}
 
 
@@ -37,6 +56,20 @@ public:
 
 
 	// OUTPUT
+
+	//---------------- OUTPUT FILE ---------------------//    INCOMPLETE
+	void OutputFile()
+	{
+		ofstream Output;
+		Output.open("bottom.txt");
+		Output << "CD   ID   FD   WD   ED" << endl;
+		for (int i = 0; i < NumberOfCompleted; i++)
+		{
+			Output << << endl;
+		}
+
+		Output.close();
+	}
 
 
 	//-----------------------------  PRINT FUNCTIONS  -----------------------------------------//
@@ -156,8 +189,10 @@ public:
 	void OutputParameters()
 	{
 		NumberOfWaiting = count(PolarWaiting_Mission) + count(EmergWaiting_Mission);
-
 		NumberOfInExecution = count(InExecutionEmerg) + count(InExecutionPolar);
+		NumberOfAvailable = count(AvailableEmerg_Rover) + count(AvailablePol_Rover);
+		NumberOfInCheckup = count(InCheckup_Emerg) + count(InCheckup_Pol);
+		NumberOfCompleted = count(CompletedEmerg) + count(CompletedPolar);
 	}
 
 
@@ -167,13 +202,19 @@ public:
 		cout << "Current Day: " << day << endl;
 		cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_Mission); cout << "] " << "("; printID(PolarWaiting_Mission); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfInExecution << "In-Execution Missions/Rovers: " << "[" << "/*Waiting emergency??*/" << "] " << "(" << "/*Waiting polar??*/" << ") " << "{" << "/*Waiting mountainous??*/" << "} " << endl;
+		cout << NumberOfInExecution << "In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;
-		cout << AvailableRovers << "Available Rovers: " << "[" << AvailableEmergency.print() << "] " << "(" << AvailablePolar.print() << ") " << endl;
+		cout << NumberOfAvailable << "Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << InCheckup << "In-Checkup Rovers: " << "[" << InCheckupEmergency.print() << "] " << "(" << InCheckupPolar.print() << ") " << endl;
+		cout << NumberOfInCheckup << "In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		//cout << Completed << "In-Execution Missions/Rovers: " << "[" << "/*Waiting emergency??*/" << "] " << "(" << "/*Waiting polar??*/" << ") " << "{" << "/*Waiting mountainous??*/" << "} " << endl;
+		cout << NumberOfCompleted << "Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	}
 
+	void Silent()
+	{
+		cout << "Silent Mode" << endl;
+		cout << "Simulation Starts..." << endl;
+		cout << "Simulation ends, Output file created" << endl;
+	}
 };
