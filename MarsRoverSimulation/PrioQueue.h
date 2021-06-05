@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Node.h"
 #include "Mission.h"
+
 using namespace std;
 template <class T> 
 class PrioQueue {
@@ -101,7 +102,7 @@ public:
         {
             //key = PrioQ[0].getKey();
             T Item = PrioQ[0].getItem();
-            return Item;
+            return this.Item;
         }
         /*else {
             return nullptr;

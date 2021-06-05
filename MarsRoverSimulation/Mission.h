@@ -7,8 +7,6 @@ private:
 	int missionDur;
 	int sig;
 	int ID;
-
-	
 public:
 	Mission(int f, char mt, int tl, int md, int s); //Initialization
 	Mission(Mission &m) {  //Copy constructor
@@ -18,7 +16,7 @@ public:
 		missionDur = m.getMDUR();
 		sig = m.getSIG();
 	}
-	Mission() {
+	 Mission() {
 		formulationDay = 0;
 		missionType = '.';
 		targetLoc = 0;

@@ -367,7 +367,7 @@ ArrQueue<Rover> MarsStation::GetInCheckup_Pol()
 void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& P)
 {
 	Mission Item;
-	//int Key;
+	int Key;
 	while (InExecution.dequeue(Item))
 	{
 		if (Item.getTYP() == 'E')
