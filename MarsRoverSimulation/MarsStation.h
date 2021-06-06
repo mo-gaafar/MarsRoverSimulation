@@ -16,6 +16,9 @@ private:
 	int EventSize;
 	int EmergRovNum;
 	int PolarRovNum;
+
+
+	//Main Data Structures
 	int NMissionsToCheckup;
 
 	//Main Data Structures
@@ -36,8 +39,10 @@ private:
 	ArrQueue<Rover> InCheckup_Emerg;
 	ArrQueue<Rover> InCheckup_Pol;
 
+
 	//InMaintenance
 	PrioQueue<Rover> InMaintenance;
+
 	//____________________________//
 	//----------Missions----------//
 	
@@ -45,13 +50,26 @@ private:
 	ArrQueue<Mission> PolarWaiting_Mission;
 	PrioQueue<Mission> EmergWaiting_Mission;
 	//Completed Missions
+
 	ArrQueue<Mission> CompletedMissions;
+
 	//In Execution Missions
 	PrioQueue<Mission> InExecution;
 	
 
 
 public:
+
+	MarsStation() {
+		day = 0;
+		ArrQueue<Event> EventList(EventSize);
+		PrioQueue<Rover> Emerg_Rovers(EmergRovNum);
+		PrioQueue<Rover> Polar_Rovers(PolarRovNum);
+		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
+			Polar_Rovers, CheckupDurEmerg, SpeedEmerg, Emerg_Rovers, NMissionsToCheckup);
+
+	}
+
 	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
 		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup, int EmergRovNum, int PolarRovNum) {
 		day = 0;
@@ -81,7 +99,8 @@ public:
 		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
 			Rover R('E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
-			Emerg_Rover.enqueue(R, SpeedEmerg);
+			//Emerg_Rover.dequeue(R);
+			Emerg_Rover.enqueue(R, SpeedEmerg); //------------------------------------------------------------------------------------------------> review this
 		}
 		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {

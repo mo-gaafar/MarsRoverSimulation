@@ -1,3 +1,5 @@
+
+#pragma once
 #include <iostream>
 #include "LinkedList.h"
 #include "Node.h"
@@ -9,6 +11,8 @@ template <typename T>
 class UI
 {
 private:
+
+  //--------------Zeyad's Declarations- -------//
 	int Mode;
 	int day;
 	ArrQueue<Mission> PolarWaiting_Mission;
@@ -29,8 +33,115 @@ private:
 	int NumberOfAvailable;
 	int NumberOfInCheckup;
 	int NumberOfCompleted;
+  
+  //--------------------------Hassan's declarations-------------------------------//
+  //MarsStation* marsstaion;
+	int EmRoverCount, PolarRoverCount;
+	int EmSpeed, PolarSpeed;
+	int EmCheck, PolarCheck, CheckCount;
+	int NumberOFEvents;
+	char* EventType, * MissionType;
+	int* EventDay, * ID, * location, * Duration, * Signifiance;
+
+
+	void createRovers();
+
 public:
-	UI(MarsStation& InputStation)
+	void Read(){
+   ifstream input;
+	input.open("Inputfile.txt");
+	if (input.fail()) {
+		cerr << "error opening file" << endl;
+		exit(1);
+	}
+	//LINE 1
+	input >> PolarRoverCount >> EmRoverCount;
+	//LINE 2
+	input >> PolarSpeed >> EmSpeed;
+	//LINE 3
+	input >> CheckCount >> PolarCheck >> EmCheck;
+	//line 4
+	input >> NumberOFEvents;
+	EventType = new char[NumberOFEvents];//dynamic array
+	MissionType = new char[NumberOFEvents];//dynamic array
+	EventDay = new int[NumberOFEvents];//dynamic array
+	ID = new int[NumberOFEvents];//dynamic array
+	location = new int[NumberOFEvents];//dynamic array
+	Duration = new int[NumberOFEvents];//dynamic array
+	Signifiance = new int[NumberOFEvents];//dynamic array
+	for (int i = 0; i < NumberOFEvents; i++) {//dynamic array
+		input >> EventType[i];
+		if (EventType[i] == 'F') {
+			input >> MissionType[i];
+			input >> EventDay[i];
+			input >> ID[i];
+			input >> location[i];
+			input >> Duration[i];
+			input >> Signifiance[i];
+		}
+		else {
+			MissionType[i] = 'x';
+			EventDay[i] = -1;
+			ID[i] = -1;
+			location[i] = -1;
+			Duration[i] = -1;
+			Signifiance[i] = -1;
+		}
+
+
+	}
+	input.close();
+  }
+	int getEmRoverCount() {
+		return EmRoverCount;
+	}
+	int getPolarRoverCount() {
+		return PolarRoverCount;
+	}
+	int getEmSpeed() {
+		return EmSpeed;
+	}
+	int getPolarSpeed() {
+		return PolarSpeed;
+	}
+	int getEmCheck() {
+		return EmCheck;
+	}
+	int getPolarCheck() {
+		return PolarCheck;
+	}
+	int getCheckCount()
+	{
+		return CheckCount;
+	}
+	int getNumberOFEvents() {
+		return NumberOFEvents;
+	}
+	int* getID() {
+		return ID;
+	}
+	char* getMissionType() {
+		return MissionType;
+	}
+	char* getEventType() {
+		return EventType;
+	}
+	int* getEventDay() {
+		return EventDay;
+	}
+	int* getlocation() {
+		return location;
+	}
+	int* getDuration() {
+		return Duration;
+	}
+	int* getSignifiance() {
+		return Signifiance;
+  
+  
+  
+public:
+	UI(MarsStation& InputStation) //Default constructor
 	{
 		day = InputStation.GetDay();
 		PolarWaiting_Mission = InputStation.GetPolarWaiting_Mission();
@@ -47,12 +158,8 @@ public:
 		NumberOfInExecution = 0;
 		NumberOfAvailable = 0;
 		NumberOfInCheckup = 0;
-		NumberOfCompleted = o;
+		NumberOfCompleted = 0;
 	}
-
-
-
-
 
 
 	// OUTPUT
