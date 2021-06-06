@@ -37,7 +37,7 @@ int main() {
 	for (int i = 0; i < 4; i++) //change limit later
 	{
 		TestStation.SimulateDay();
-		UserInterface.Refresh(&TestStation);
+		UserInterface.Refresh(TestStation);
 		if (ProgMode == 1)
 		{
 			UserInterface.Interactive();

@@ -68,6 +68,8 @@ public:
 		if (isempty()) 
 		{
 			//return false;
+			T item;
+			return item;
 			
 		}
 		else {

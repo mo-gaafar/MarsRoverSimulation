@@ -154,14 +154,14 @@ public:
 
 	//   GETTERS FOR UI   //
 	int GetDay();
-	ArrQueue<Mission> GetPolarWaiting_Mission();
+	void GetPolarWaiting_Mission(ArrQueue<Mission>& m);
 	PrioQueue<Mission> GetEmergWaiting_Mission();
 	void GetBusy_Rovers(PrioQueue<Rover>& Emerg, PrioQueue<Rover>& Polar);
 	void GetInExecution(PrioQueue<Mission>& Emerg, PrioQueue<Mission>& Polar);
 	PrioQueue<Rover> GetAvailablePol_Rover();
 	PrioQueue<Rover> GetAvailableEmerg_Rover();
-	ArrQueue<Rover> GetInCheckup_Emerg();
-	ArrQueue<Rover> GetInCheckup_Pol();
+	void GetInCheckup_Emerg(ArrQueue<Rover> &r);
+	void GetInCheckup_Pol(ArrQueue<Rover> &r);
 	void GetCompletedMissions(ArrQueue<Mission>& Emerg, ArrQueue<Mission>& Polar);
 	int GetPolarRovNum();
 	int GetEmergRovNum();
@@ -200,11 +200,11 @@ void MarsStation::Execute() {
 			int Priority;
 			Mission M;
 			M = PolarWaiting_Mission.dequeue();
-			Priority = day + M.getMDUR();
-			InExecution.enqueue(M, Priority);
 			Rover R;
 			R = Pol_Rover.dequeue(key);
-			Priority = day + M.getMDUR();
+			Priority = day + 2*(R.getSpeed()+M.getTLOC())+ M.getMDUR();
+			InExecution.enqueue(M, Priority);
+			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else
@@ -217,11 +217,11 @@ void MarsStation::Execute() {
 			int Priority;
 			Mission M;
 			M = EmergWaiting_Mission.dequeue(key);
-			Priority = day + M.getMDUR();
-			InExecution.enqueue(M, Priority);
 			Rover R;
 			R = Emerg_Rover.dequeue(key);
-			Priority = day + M.getMDUR();
+			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			InExecution.enqueue(M, Priority);
+			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else {
@@ -364,9 +364,9 @@ int MarsStation::GetDay()
 }
 
 
-ArrQueue<Mission> MarsStation::GetPolarWaiting_Mission()
+void MarsStation::GetPolarWaiting_Mission(ArrQueue<Mission> &m)
 {
-	return PolarWaiting_Mission;
+	m = PolarWaiting_Mission;
 }
 
 
@@ -410,14 +410,14 @@ PrioQueue<Rover> MarsStation::GetAvailableEmerg_Rover()
 	return Emerg_Rover;
 }
 
-ArrQueue<Rover> MarsStation::GetInCheckup_Emerg()
+void MarsStation::GetInCheckup_Emerg(ArrQueue<Rover> &r)
 {
-	return InCheckup_Emerg;
+	r = InCheckup_Emerg;
 }
 
-ArrQueue<Rover> MarsStation::GetInCheckup_Pol()
+void MarsStation::GetInCheckup_Pol(ArrQueue<Rover> &r)
 {
-	return InCheckup_Pol;
+	r = InCheckup_Pol;
 }
 
 void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& P)

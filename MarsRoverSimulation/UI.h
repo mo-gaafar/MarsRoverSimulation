@@ -47,13 +47,13 @@ private:
 	//void createRovers();
 
 public:
-	void Read(){
-	ifstream input;
-	input.open("InputFile.txt");
-	if (input.fail()) {
-		cerr << "Could not open file!" << endl;
-		exit(1);
-	}
+	void Read() {
+		ifstream input;
+		input.open("InputFile.txt");
+		if (input.fail()) {
+			cerr << "Could not open file!" << endl;
+			exit(1);
+		}
 	//LINE 1
 	input >> PolarRoverCount >> EmRoverCount;
 	//LINE 2
@@ -167,18 +167,18 @@ public:
 		ProgramMode();
 	}
 
-	void Refresh(MarsStation* InputStation) //refreshes data in UI to prepare for output
+	void Refresh(MarsStation &InputStation) //refreshes data in UI to prepare for output
 	{
-		day = InputStation->GetDay();
-		PolarWaiting_Mission = InputStation->GetPolarWaiting_Mission();
-		EmergWaiting_Mission = InputStation->GetEmergWaiting_Mission();
-		InputStation->GetInExecution(InExecutionEmerg, InExecutionPolar);
-		InputStation->GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
-		AvailableEmerg_Rover = InputStation->GetAvailableEmerg_Rover();
-		AvailablePol_Rover = InputStation->GetAvailablePol_Rover();
-		InCheckup_Emerg = InputStation->GetInCheckup_Emerg();
-		InCheckup_Pol = InputStation->GetInCheckup_Pol();
-		InputStation->GetCompletedMissions(CompletedEmerg, CompletedPolar);
+		day = InputStation.GetDay();
+		InputStation.GetPolarWaiting_Mission(PolarWaiting_Mission);
+		EmergWaiting_Mission = InputStation.GetEmergWaiting_Mission();
+		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
+		InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
+		AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
+		AvailablePol_Rover = InputStation.GetAvailablePol_Rover();
+		InputStation.GetInCheckup_Emerg(InCheckup_Emerg);
+		InputStation.GetInCheckup_Pol(InCheckup_Pol);
+		InputStation.GetCompletedMissions(CompletedEmerg, CompletedPolar);
 
 		NumberOfWaiting = 0;
 		NumberOfInExecution = 0;
