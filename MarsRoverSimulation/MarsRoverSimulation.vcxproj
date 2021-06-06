@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="ArrQueue.h" />
     <ClInclude Include="Event.h" />

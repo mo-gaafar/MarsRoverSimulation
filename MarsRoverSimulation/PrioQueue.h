@@ -1,12 +1,15 @@
-// C++ implementation of a priority queue
+#pragma once
 
 #include <iostream>
+#include "Node.h"
+#include "Mission.h"
+
 using namespace std;
-template <typename T> 
+template <class T> 
 class PrioQueue {
 private:
-    const static int MAX_SIZE = 15;
-    T heap[MAX_SIZE];
+    const static int Capacity = 100;
+    Node<T> PrioQ[Capacity]; //Initialize an array of nodes
     int size = 0;
 
 public:
@@ -30,36 +33,37 @@ public:
     }
 
 
-    static void swap(T* x, T* y) {
-        T temp = *x;
+    static void swap(Node<T>* x, Node<T>* y) {
+        Node<T> temp = *x;
         *x = *y;
         *y = temp;
     }
 
     // insert the item at the appropriate position
-    void enqueue(T data) {
-        if (size >= MAX_SIZE) {
+    void enqueue(T data,int key) {
+        if (size >= Capacity) {
             cout << "The heap is full. Cannot insert" << endl;
             return;
         }
 
         // first insert the time at the last position of the array 
         // and move it up
-        heap[size] = data;
-        size = size + 1;
+        PrioQ[size].setItem(data);
+        PrioQ[size].setKey(key);
+        size++ ;
 
 
         // move up until the heap property satisfies
         int i = size - 1;
-        while (i != 0 && heap[parent(i)] < heap[i]) {
-            swap(&heap[parent(i)], &heap[i]);
+        while (i != 0 && PrioQ[parent(i)] > PrioQ[i]) {
+            swap(&PrioQ[parent(i)], &PrioQ[i]);
             i = parent(i);
         }
     }
 
     // moves the item at position i of array a
     // into its appropriate position
-    void maxHeapify(int i) {
+    void reHeap(int i) {
         // find left child node
         int left = leftChild(i);
 
@@ -67,55 +71,129 @@ public:
         int right = rightChild(i);
 
         // find the largest among 3 nodes
-        int largest = i;
+        int smallest = i;
 
         // check if the left node is larger than the current node
-        if (left <= size && heap[left] > heap[largest]) {
-            largest = left;
+        if (left <= size && PrioQ[left] < PrioQ[smallest]) {
+            smallest = left;
         }
 
         // check if the right node is larger than the current node 
         // and left node
-        if (right <= size && heap[right] > heap[largest]) {
-            largest = right;
+        if (right <= size && PrioQ[right] < PrioQ[smallest]) {
+            smallest = right;
         }
 
         // swap the largest node with the current node 
         // and repeat this process until the current node is larger than 
         // the right and the left node
-        if (largest != i) {
-            int temp = heap[i];
-            heap[i] = heap[largest];
-            heap[largest] = temp;
-            maxHeapify(largest);
+        if (smallest != i) {
+            Node<T> temp = PrioQ[i];
+            PrioQ[i] = PrioQ[smallest];
+            PrioQ[smallest] = temp;
+            reHeap(smallest);
         }
 
     }
 
     // returns the  maximum item of the heap
-    int peek() {
-        return heap[0];
+    T peek() {
+        if (size)
+        {
+            //key = PrioQ[0].getKey();
+            T Item = PrioQ[0].getItem();
+            return this.Item;
+        }
+        /*else {
+            return nullptr;
+        }*/
+    }
+    T peek(int &key) {
+        if (size)
+        {
+            key = PrioQ[0].getKey();
+            return PrioQ[0].getItem();
+        }
+        /*else {
+            return nullptr;
+        }*/
+    }
+
+    bool isEmpty() {
+        if (size == 0)
+            return true;
+        return false;
     }
 
     // deletes the max item and return
-    int dequeue() {
-        int maxItem = heap[0];
+    bool dequeue(T &maxItem) {
+        if (size == 0)
+            return false;
+
+        maxItem = PrioQ[0].getItem();
+        
 
         // replace the first item with the last item
-        heap[0] = heap[size - 1];
+        PrioQ[0] = PrioQ[size - 1];
+        size-- ;
+
+        // maintain the heap property by heapifying the 
+        // first item
+        reHeap(0);
+        return true;
+    }
+
+    //dequeue overloaded with key
+    bool dequeue(T& maxItem, int &Key) {
+        if (size == 0)
+            return false;
+
+        maxItem = PrioQ[0].getItem();
+        Key = PrioQ[0].getKey();
+
+        // replace the first item with the last item
+        PrioQ[0] = PrioQ[size - 1];
         size = size - 1;
 
         // maintain the heap property by heapifying the 
         // first item
-        maxHeapify(0);
+        reHeap(0);
+        return true;
+    }
+
+    T dequeue(int &Key) {
+       /* if (size == 0)
+            return false;*/
+
+        T maxItem;
+        maxItem = PrioQ[0].getItem();
+        Key = PrioQ[0].getKey();
+
+        // replace the first item with the last item
+        PrioQ[0] = PrioQ[size - 1];
+        size = size - 1;
+
+        // maintain the heap property by heapifying the 
+        // first item
+        reHeap(0);
         return maxItem;
     }
 
+
     // prints the heap
     void printQueue() {
-        for (int i = 0; i < size; i++) {
-            cout << heap[i] <<endl;
+        PrioQueue<T> Temp;
+        T data;
+        int key;
+        while(dequeue(data, key))
+        {
+            cout << data <<","<< key << endl;
+            Temp.enqueue(data, key);
         }
         cout << endl;
     }
+
+
+  
+
 };

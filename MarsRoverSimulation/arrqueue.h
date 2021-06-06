@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-template<typename T>
+template<class T>
 class ArrQueue {
 private:
 	T* items;
@@ -14,6 +14,12 @@ public:
 
 	ArrQueue(int MaxSize) : arrsize(MaxSize)
 	{
+		items = new T[arrsize];
+		front = -1;
+		rear = -1;
+	}
+	ArrQueue() {
+		arrsize= 100;
 		items = new T[arrsize];
 		front = -1;
 		rear = -1;
@@ -43,29 +49,59 @@ public:
 
 		}
 	}
-	bool dequeue(T& item) {
-		if (isempty())return false;
-		else if (front == rear) {
-			item = items[front];
-			front = rear = -1;
-			return true;
-
+	T& const dequeue() {
+		if (isempty()) 
+		{
+			//return false;
+			
 		}
 		else {
-			item = items[front];
-			front++;
-			return true;
+			T item;
+			if (front == rear) {
+				item = items[front];
+				front = rear = -1;
+				return item;
+			}
+			else {
+				item = items[front];
+				front++;
+				return item;
+			}
+		}
 
-
+	}
+	bool dequeue(T& Item) {
+		if (isempty()) {
+			return false;
+		}
+		else {
+			T item;
+			if (front == rear) {
+				item = items[front];
+				front = rear = -1;
+				Item = item;
+				return true;
+			}
+			else
+			{
+				item = items[front];
+				front++;
+				Item = item;
+				return true;
+			}
 		}
 	}
 
+
 	T peek() {
-		if (isempty())value = -1;
-		else
+		
+		/*if (isempty())
+			return ;
+		else*/
 		{
 			return items[front];
 		}
 	}
+
 };
 

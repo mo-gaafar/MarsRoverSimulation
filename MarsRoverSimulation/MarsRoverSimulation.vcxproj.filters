@@ -3,6 +3,9 @@
   <ItemGroup>
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Mission.h" />
