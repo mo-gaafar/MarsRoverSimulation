@@ -19,6 +19,9 @@ private:
 	int NMissionsToCheckup;
 
 	//Main Data Structures
+	
+	//Formulation Events
+	ArrQueue<Event> EventList;
 	//_________________________//
 	//---------Rovers----------//
 	
@@ -57,17 +60,17 @@ public:
 		this-> PolarRovNum = PolarRovNum;
 		this->NMissionsToCheckup = NMissionsToCheckup;
 
-		ArrQueue<Event> EventList(EventSize);
-		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventList, CheckupDurPol, SpeedPol,
-			Pol_Rover, CheckupDurEmerg, SpeedEmerg, Emerg_Rover, NMissionsToCheckup);
+		//ArrQueue<Event> EventList(EventSize);
+		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, CheckupDurPol, SpeedPol,
+			CheckupDurEmerg, SpeedEmerg,  NMissionsToCheckup);
 
 	}
 	
 	//Getting EventList and Rover Queues Ready
 	void Initialize(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, 
-		int* MDUR_Arr,int* SIG_Arr, ArrQueue<Event> &EventList,
-		int CheckupDurPol, int SpeedPol, PrioQueue<Rover> & Polar_Rovers,
-		int CheckupDurEmerg, int SpeedEmerg, PrioQueue<Rover>& Emerg_Rovers, 
+		int* MDUR_Arr,int* SIG_Arr, 
+		int CheckupDurPol, int SpeedPol, 
+		int CheckupDurEmerg, int SpeedEmerg, 
 		int NMissionsToCheckup)
 	{
 		//Initializing Events List
@@ -78,12 +81,12 @@ public:
 		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
 			Rover R('E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
-			Emerg_Rovers.enqueue(R, SpeedEmerg);
+			Emerg_Rover.enqueue(R, SpeedEmerg);
 		}
 		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {
 			Rover R('P', CheckupDurPol, SpeedPol,NMissionsToCheckup);
-			Polar_Rovers.enqueue(R, SpeedPol);
+			Pol_Rover.enqueue(R, SpeedPol);
 		}
 	}
 	//Setters and getters
@@ -91,8 +94,8 @@ public:
 	
 	//
 
-	void SimulateDay(ArrQueue<Event> &EventList) {
-		Formulate(EventList);
+	void SimulateDay() {
+		Formulate();
 		Execute();
 		Complete();
 		CheckUp();
@@ -100,7 +103,7 @@ public:
 		day++;
 	}
 
-	void Formulate(ArrQueue<Event> &EventList);
+	void Formulate();
 	void Execute();
 	void Complete();
 	bool CheckUpCheck(Rover &r);
@@ -125,18 +128,21 @@ public:
 };
 
 
-void MarsStation::Formulate(ArrQueue<Event> &EventList) {
+void MarsStation::Formulate() {
 	bool check = true;
 	while (check) {
-		if (EventList.peek().getED() == day) {
-			if (EventList.peek().getET() == 'P') {
+		// if the mission is to be formulated today, 
+		if (EventList.peek().getED() == day && !EventList.isempty() ) {
+			if (EventList.peek().getTYP() == 'P') {
 				Mission M(EventList.peek().getED(), 'P', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
 				PolarWaiting_Mission.enqueue(M);
+				EventList.dequeue(); //dequeue from eventlist after formulation
 			}
-			else if(EventList.peek().getET() ==  'E'){
+			else if(EventList.peek().getTYP() ==  'E'){
 				Mission M(EventList.peek().getED(), 'E', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
 				int Priority = M.getSIG();
 				EmergWaiting_Mission.enqueue(M, Priority);
+				EventList.dequeue(); //dequeue from eventlist after formulation
 			}
 		}
 		else {
@@ -149,7 +155,8 @@ void MarsStation::Execute() {
 	bool check = true;
 	int key;
 	while (check) {
-		if (!Pol_Rover.isEmpty()) {
+		//Checking if theres any available rover & if theres a mission waiting for it
+		if (!Pol_Rover.isEmpty() && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
 			M = PolarWaiting_Mission.dequeue();
@@ -165,7 +172,8 @@ void MarsStation::Execute() {
 	}
 	check = true;
 	while (check) {
-		if (!Emerg_Rover.isEmpty()) {
+		//Checking if theres any available rover & if theres a mission waiting for it
+		if (!Emerg_Rover.isEmpty() && !EmergWaiting_Mission.isEmpty()) {
 			int Priority;
 			Mission M;
 			M = EmergWaiting_Mission.dequeue(key);
@@ -206,12 +214,14 @@ void MarsStation::Complete() {
 				else {
 					if (type == 'E')
 					{
-					Priority = R.getSpeed();//Calculate Priority
-					Emerg_Rover.enqueue(R, Priority);
+						Priority = R.getSpeed();//Calculate Priority
+						Emerg_Rover.enqueue(R, Priority);
 					}
 				}
 			}
 		}
+		else
+			check = false; //bug fix needs review
 	}
 }
 
@@ -256,6 +266,10 @@ void MarsStation::CheckUp() {
 				Emerg_Rover.enqueue(R, Priority);
 			}
 		}
+		else //bug fix needs review
+		{
+			check = false;
+		}
 	}
 }
 
@@ -286,7 +300,7 @@ void MarsStation::Maintenance() {
 				Priority = R.getSpeed();
 				Pol_Rover.enqueue(R, Priority);
 			}
-			else 
+			else
 			{
 				if (type == 'E')
 				{
@@ -294,7 +308,9 @@ void MarsStation::Maintenance() {
 					Emerg_Rover.enqueue(R, Priority);
 				}
 			}
+
 		}
+		else check = false;
 	}
 }
 

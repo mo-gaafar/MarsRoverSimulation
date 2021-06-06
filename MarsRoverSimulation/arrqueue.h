@@ -49,7 +49,7 @@ public:
 
 		}
 	}
-	T dequeue() {
+	T& const dequeue() {
 		if (isempty()) 
 		{
 			//return false;

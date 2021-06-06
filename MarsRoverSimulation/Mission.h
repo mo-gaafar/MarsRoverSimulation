@@ -18,20 +18,21 @@ public:
 	}
 	 Mission() {
 		formulationDay = 0;
-		missionType = '.';
+		missionType = 0;
 		targetLoc = 0;
 		missionDur = 0;
 		sig = 0;
+		ID = 0;
 	}
 
-	Mission operator = (Mission const& m) {
-		Mission m2;
-		m2.formulationDay = m.formulationDay;
-		m2.missionType = m.missionType;
-		m2.targetLoc = m.targetLoc;
-		m2.missionDur = m.missionDur;
-		m2.sig = m.sig;
-		return m2;
+	Mission& operator = (const Mission & m) {
+		
+		formulationDay = m.formulationDay;
+		missionType = m.missionType;
+		targetLoc = m.targetLoc;
+		missionDur = m.missionDur;
+		sig = m.sig;
+		return *this;
 	}
 
 	//GETTERS

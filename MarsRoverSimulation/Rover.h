@@ -10,7 +10,17 @@ private:
 	int missionNo;
 	int ID;
 public:
-	Rover(char t, int cd, int s, int cmn); //Initialiaztion
+	//Used in Initialiaztion 
+	Rover(char t, int cd, int s, int cmn) {
+		roverType = t;
+		checkupDur = cd;
+		speed = s;
+		checkupMissionNo = cmn;
+		inCheckDays = -1;
+		missionNo = 0;
+		inMaintenanceDay = 0;
+	}
+	//Copy constructor
 	Rover(Rover const & r) {
 		roverType = r.getTYP();
 		checkupDur = r.getCDUR();
@@ -20,9 +30,9 @@ public:
 		missionNo = r.getMissionNO();
 		inMaintenanceDay = r.getinMaintenanceDay();
 	}
-	
+	//Default constructor
 	Rover() {
-		roverType = '.';
+		roverType = 0;
 		checkupDur = 0;
 		checkupMissionNo = 0;
 		speed = 0;
@@ -31,16 +41,16 @@ public:
 		inMaintenanceDay = -1;
 	}
 
-	Rover operator = (Rover const& r) {
-		Rover r2;
-		r2.roverType = r.roverType;
-		r2.checkupDur = r.checkupDur;
-		r2.checkupMissionNo = r.checkupMissionNo;
-		r2.speed = r.speed;
-		r2.inCheckDays = r.inCheckDays;
-		r2.missionNo = r.missionNo;
-		r2.inMaintenanceDay = r.inMaintenanceDay;
-		return r2;
+	Rover & operator = (const Rover & r) {
+		
+		roverType = r.roverType;
+		checkupDur = r.checkupDur;
+		checkupMissionNo = r.checkupMissionNo;
+		speed = r.speed;
+		inCheckDays = r.inCheckDays;
+		missionNo = r.missionNo;
+		inMaintenanceDay = r.inMaintenanceDay;
+		return *this;
 	}
 
 	//GETTERS
@@ -61,13 +71,3 @@ public:
 
 	~Rover() {}
 };
-
-Rover::Rover(char t, int cd, int s, int cmn) {
-	roverType = t;
-	checkupDur = cd;
-	speed = s;
-	checkupMissionNo = cmn;
-	inCheckDays = -1;
-	missionNo = 0;
-	inMaintenanceDay = 0;
-}

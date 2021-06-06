@@ -40,7 +40,7 @@ public:
     }
 
     // insert the item at the appropriate position
-    void enqueue(T &data,int &key) {
+    void enqueue(T data,int key) {
         if (size >= Capacity) {
             cout << "The heap is full. Cannot insert" << endl;
             return;
@@ -120,9 +120,9 @@ public:
     }
 
     bool isEmpty() {
-        if (size)
-            return false;
-        return true;
+        if (size == 0)
+            return true;
+        return false;
     }
 
     // deletes the max item and return

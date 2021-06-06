@@ -6,13 +6,13 @@
 int main() {
 	int EventSize = 9;
 	ArrQueue<Event> EventList;
-	char F_Arr[9];
-	char TYP_Arr[9];
-	int ED_Arr[9];
-	int ID_Arr[9];
-	int TLOC_Arr[9];
-	int MDUR_Arr[9];
-	int SIG_Arr[9];
+	char *F_Arr = new char[9];
+	char * TYP_Arr = new char [9];
+	int * ED_Arr = new int [9];
+	int * ID_Arr = new int[9];
+	int * TLOC_Arr = new int[9];
+	int * MDUR_Arr = new int[9];
+	int * SIG_Arr = new int[9];
 
 	int EventArrInput[9][7] =
 	{
@@ -54,9 +54,9 @@ int main() {
 	MarsStation TestStation(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize,
 		CheckupDurPol, SpeedPol, CheckupDurEmerg,SpeedEmerg, NMissionsToCheckup,
 		EmergRovNum,PolarRovNum);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		TestStation.SimulateDay(EventList);
+		TestStation.SimulateDay();
 	}
 
 
