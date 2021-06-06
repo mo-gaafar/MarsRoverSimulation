@@ -14,13 +14,14 @@
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="ArrQueue.h" />
     <ClInclude Include="PrioQueue.h" />
-    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="UI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\moham\Desktop\bottom.txt" />
   </ItemGroup>
 </Project>

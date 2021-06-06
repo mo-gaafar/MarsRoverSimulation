@@ -1,19 +1,16 @@
-
 #pragma once
 #include <iostream>
-#include "LinkedList.h"
-#include "Node.h"
-#include "MarsStation.h"
+
+#include "../MarsRoverSimulation/MarsStation.h"
 #include <fstream>
 using namespace std;
 
-template <typename T>
 class UI
 {
 private:
 
   //--------------Zeyad's Declarations- -------//
-	int Mode;
+	int ProgMode;
 	int day;
 	ArrQueue<Mission> PolarWaiting_Mission;
 	PrioQueue<Mission> EmergWaiting_Mission;
@@ -33,6 +30,9 @@ private:
 	int NumberOfAvailable;
 	int NumberOfInCheckup;
 	int NumberOfCompleted;
+
+	int NumberOfEmergRovers;
+	int NumberOfPolarRovers;
   
   //--------------------------Hassan's declarations-------------------------------//
   //MarsStation* marsstaion;
@@ -44,14 +44,14 @@ private:
 	int* EventDay, * ID, * location, * Duration, * Signifiance;
 
 
-	void createRovers();
+	//void createRovers();
 
 public:
 	void Read(){
-   ifstream input;
-	input.open("Inputfile.txt");
+	ifstream input;
+	input.open("InputFile.txt");
 	if (input.fail()) {
-		cerr << "error opening file" << endl;
+		cerr << "Could not open file!" << endl;
 		exit(1);
 	}
 	//LINE 1
@@ -60,8 +60,9 @@ public:
 	input >> PolarSpeed >> EmSpeed;
 	//LINE 3
 	input >> CheckCount >> PolarCheck >> EmCheck;
-	//line 4
+	//LINE 4
 	input >> NumberOFEvents;
+
 	EventType = new char[NumberOFEvents];//dynamic array
 	MissionType = new char[NumberOFEvents];//dynamic array
 	EventDay = new int[NumberOFEvents];//dynamic array
@@ -69,6 +70,8 @@ public:
 	location = new int[NumberOFEvents];//dynamic array
 	Duration = new int[NumberOFEvents];//dynamic array
 	Signifiance = new int[NumberOFEvents];//dynamic array
+
+
 	for (int i = 0; i < NumberOFEvents; i++) {//dynamic array
 		input >> EventType[i];
 		if (EventType[i] == 'F') {
@@ -79,80 +82,103 @@ public:
 			input >> Duration[i];
 			input >> Signifiance[i];
 		}
-		else {
+		/*else {
 			MissionType[i] = 'x';
 			EventDay[i] = -1;
 			ID[i] = -1;
 			location[i] = -1;
 			Duration[i] = -1;
 			Signifiance[i] = -1;
+		}*/
+
+
 		}
-
-
-	}
 	input.close();
-  }
-	int getEmRoverCount() {
+	}
+	int getProgMode() {
+		return ProgMode;
+	}
+	int  getEmRoverCount() const 
+	{
 		return EmRoverCount;
 	}
-	int getPolarRoverCount() {
+	int getPolarRoverCount() const {
 		return PolarRoverCount;
 	}
-	int getEmSpeed() {
+	int getEmSpeed() const {
 		return EmSpeed;
 	}
-	int getPolarSpeed() {
+	int getPolarSpeed() const {
 		return PolarSpeed;
 	}
-	int getEmCheck() {
+	int getEmCheck() const {//------------------> is this checkup duration?????
 		return EmCheck;
 	}
-	int getPolarCheck() {
+	int getPolarCheck()const {
 		return PolarCheck;
 	}
-	int getCheckCount()
+	int getCheckCount()const
 	{
 		return CheckCount;
 	}
-	int getNumberOFEvents() {
+	int getNumberOFEvents() const {
 		return NumberOFEvents;
 	}
-	int* getID() {
+	int* getID() const {
 		return ID;
 	}
-	char* getMissionType() {
+	char* getMissionType() const {
 		return MissionType;
 	}
-	char* getEventType() {
+	char* getEventType() const {
 		return EventType;
 	}
-	int* getEventDay() {
+	int* getEventDay()const {
 		return EventDay;
 	}
-	int* getlocation() {
+	int* getLocation() const {
 		return location;
 	}
-	int* getDuration() {
+	int* getDuration() const {
 		return Duration;
 	}
-	int* getSignifiance() {
+	int* getSignifiance()const {
 		return Signifiance;
+	}
+	/*
+	int EmRoverCount, PolarRoverCount;
+	int EmSpeed, PolarSpeed;
+	int EmCheck, PolarCheck, CheckCount;
+	int NumberOFEvents;
+	char* EventType, * MissionType;
+	int* EventDay, * ID, * location, * Duration, * Signifiance;
+	*/
+	////Hands off input to the marsstation object
+	//void getInitialInput(int & EmRoverCount,int &PolarRoverCount, int &EmSpeed, int& PolarSpeed,
+	//	int &EmCheckup, int &PolarChekup, int &CheckupCount, int EventSize, ) const {
+
+
+	//	}
   
   
-  
-public:
-	UI(MarsStation& InputStation) //Default constructor
+	UI() //Default Constructor
 	{
-		day = InputStation.GetDay();
-		PolarWaiting_Mission = InputStation.GetPolarWaiting_Mission();
-		EmergWaiting_Mission = InputStation.GetEmergWaiting_Mission();
-		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
-		InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
-		AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
-		AvailablePol_Rover = InputStation.GetAvailablePol_Rover();
-		InCheckup_Emerg = InputStation.GetInCheckup_Emerg();
-		InCheckup_Pol = InputStation.GetInCheckup_Pol();
-		InputStation.GetCompletedMissions(CompletedEmerg, CompletedPolar);
+		Read();// fills the UI up for the first time
+		ProgramMode();
+	}
+
+	void Refresh(MarsStation* InputStation) //refreshes data in UI to prepare for output
+	{
+		day = InputStation->GetDay();
+		PolarWaiting_Mission = InputStation->GetPolarWaiting_Mission();
+		EmergWaiting_Mission = InputStation->GetEmergWaiting_Mission();
+		InputStation->GetInExecution(InExecutionEmerg, InExecutionPolar);
+		InputStation->GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
+		AvailableEmerg_Rover = InputStation->GetAvailableEmerg_Rover();
+		AvailablePol_Rover = InputStation->GetAvailablePol_Rover();
+		InCheckup_Emerg = InputStation->GetInCheckup_Emerg();
+		InCheckup_Pol = InputStation->GetInCheckup_Pol();
+		InputStation->GetCompletedMissions(CompletedEmerg, CompletedPolar);
 
 		NumberOfWaiting = 0;
 		NumberOfInExecution = 0;
@@ -168,13 +194,20 @@ public:
 	void OutputFile()
 	{
 		ofstream Output;
+		Mission Item;
 		Output.open("bottom.txt");
-		Output << "CD   ID   FD   WD   ED" << endl;
+		Output << "CD    ID    FD    WD    ED" << endl;
 		for (int i = 0; i < NumberOfCompleted; i++)
 		{
-			Output << << endl;
+			CompletedEmerg.dequeue(Item);
+			int FD = Item.getFD();
+			int ID = Item.getID();
+			int ED = Item.getMDUR();
+			Output << ID << FD << ED << endl;
 		}
-
+		Output << "......................................................" << endl;
+		Output << "Missions: " << NumberOfCompleted << " [P: " << count(CompletedPolar) << ", E: " << count(CompletedEmerg) << "]" << endl;
+		Output << "Rovers: " << NumberOfEmergRovers + NumberOfPolarRovers << " [P: " << NumberOfPolarRovers << ", E: " << NumberOfEmergRovers << "]" << endl;
 		Output.close();
 	}
 
@@ -182,6 +215,8 @@ public:
 	//-----------------------------  PRINT FUNCTIONS  -----------------------------------------//
 
 
+	
+	
 	//    ArrQueue ROVER PRINT   //
 	void printID(ArrQueue<Rover>& Q)
 	{
@@ -289,7 +324,7 @@ public:
 		cout << "1. Interactive " << endl;
 		cout << "2. Step-by-step " << endl;
 		cout << "3. Silent " << endl;
-		cin >> Mode;
+		cin >> ProgMode;
 	}
 
 
@@ -301,11 +336,12 @@ public:
 		NumberOfInCheckup = count(InCheckup_Emerg) + count(InCheckup_Pol);
 		NumberOfCompleted = count(CompletedEmerg) + count(CompletedPolar);
 	}
-
+	
 
 
 	void Interactive()   // RUNS INTERACTIVE
 	{
+		OutputParameters();
 		cout << "Current Day: " << day << endl;
 		cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_Mission); cout << "] " << "("; printID(PolarWaiting_Mission); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
@@ -324,4 +360,6 @@ public:
 		cout << "Simulation Starts..." << endl;
 		cout << "Simulation ends, Output file created" << endl;
 	}
+
+
 };

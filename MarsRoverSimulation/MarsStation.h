@@ -1,3 +1,4 @@
+#pragma once
 #include"ArrayList.h"
 #include"ArrQueue.h"
 #include"LinkedList.h"
@@ -6,7 +7,8 @@
 #include"Rover.h"
 #include"Mission.h"
 #include"Event.h"
-#include<iostream>
+//#include "UI.h"
+
 
 using namespace std;
 
@@ -60,15 +62,33 @@ private:
 
 public:
 
-	MarsStation() {
-		day = 0;
-		ArrQueue<Event> EventList(EventSize);
-		PrioQueue<Rover> Emerg_Rovers(EmergRovNum);
-		PrioQueue<Rover> Polar_Rovers(PolarRovNum);
-		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize, EventList, CheckupDurPol, SpeedPol,
-			Polar_Rovers, CheckupDurEmerg, SpeedEmerg, Emerg_Rovers, NMissionsToCheckup);
+	//MarsStation() {
+	//	day = 0;
+	//	
+	//	//---------------------Initialization Stage---------------------//
+	//	UI UserInterface; // interface object which reads from input file on construction
 
-	}
+	//	this->EmergRovNum = UserInterface.getEmRoverCount();
+	//	this->PolarRovNum = UserInterface.getPolarRoverCount();
+	//	this->NMissionsToCheckup = UserInterface.getCheckCount();
+	//	this->EventSize = UserInterface.getNumberOFEvents();
+
+	//	//initializing F_Arr (useless event type array)
+	//	char* F_Arr = new char[EventSize];
+	//	for (int i = 0; i < EventSize; i++)
+	//	{
+	//		F_Arr[i] = 'F';//formulation event type
+	//	}
+
+	//	Initialize(F_Arr, UserInterface.getMissionType(), UserInterface.getEventDay(), UserInterface.getID(), UserInterface.getLocation(), 
+	//		UserInterface.getDuration(), UserInterface.getSignifiance(), UserInterface.getPolarCheck(), UserInterface.getPolarSpeed(),
+	//		UserInterface.getEmCheck(), UserInterface.getEmSpeed(), UserInterface.getCheckCount());
+
+	//	//---------------------Run Simulation---------------------//
+	//	UserInterface.ProgramMode();
+
+
+	//}
 
 	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
 		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup, int EmergRovNum, int PolarRovNum) {
@@ -143,7 +163,8 @@ public:
 	ArrQueue<Rover> GetInCheckup_Emerg();
 	ArrQueue<Rover> GetInCheckup_Pol();
 	void GetCompletedMissions(ArrQueue<Mission>& Emerg, ArrQueue<Mission>& Polar);
-
+	int GetPolarRovNum();
+	int GetEmergRovNum();
 };
 
 
@@ -410,4 +431,14 @@ void MarsStation::GetCompletedMissions(ArrQueue<Mission>& E, ArrQueue<Mission>& 
 		else if (Item.getTYP() == 'P')
 			P.enqueue(Item);
 	}
+}
+
+int MarsStation::GetPolarRovNum()
+{
+	return PolarRovNum;
+}
+
+int MarsStation::GetEmergRovNum()
+{
+	return EmergRovNum;
 }

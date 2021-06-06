@@ -1,4 +1,6 @@
 #pragma once
+#include"Rover.h"
+
 class Mission {
 private:
 	int formulationDay;
@@ -7,6 +9,12 @@ private:
 	int missionDur;
 	int sig;
 	int ID;
+
+	//not yet implemented in simulation
+	int missionED; //execution day
+	Rover* RoverPtr; //to get speed and rover ID
+
+
 public:
 	Mission(int f, char mt, int tl, int md, int s); //Initialization
 	Mission(Mission const &m) {  //Copy constructor
@@ -15,6 +23,7 @@ public:
 		targetLoc = m.getTLOC();
 		missionDur = m.getMDUR();
 		sig = m.getSIG();
+		ID = m.getID();
 	}
 	 Mission() {
 		formulationDay = 0;
@@ -32,6 +41,7 @@ public:
 		targetLoc = m.targetLoc;
 		missionDur = m.missionDur;
 		sig = m.sig;
+		ID = m.ID;
 		return *this;
 	}
 

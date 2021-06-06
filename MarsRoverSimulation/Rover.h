@@ -9,6 +9,9 @@ private:
 	int inMaintenanceDay;
 	int missionNo;
 	int ID;
+
+	
+
 public:
 	//Used in Initialiaztion 
 	Rover(char t, int cd, int s, int cmn) {

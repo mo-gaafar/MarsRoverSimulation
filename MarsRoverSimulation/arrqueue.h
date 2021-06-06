@@ -11,6 +11,21 @@ private:
 	int rear;
 	int arrsize;
 public:
+	//Copy Constructor
+	ArrQueue( ArrQueue<T> & Copy) 
+	{
+		ArrQueue<T> Temp;
+		T Item;
+		while (dequeue(Item))
+		{
+			Copy.enqueue(Item);
+			Temp.enqueue(Item);
+		}
+		while (dequeue(Item))
+		{
+			enqueue(Item);
+		}
+	}
 
 	ArrQueue(int MaxSize) : arrsize(MaxSize)
 	{

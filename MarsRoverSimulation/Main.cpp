@@ -3,61 +3,65 @@
 #include "PrioQueue.h"
 #include "MarsStation.h"
 #include "ArrayList.h"
+#include "UI.h"
+#include "arrqueue.h"
 int main() {
-	int EventSize = 9;
-	ArrQueue<Event> EventList;
-	char *F_Arr = new char[9];
-	char * TYP_Arr = new char [9];
-	int * ED_Arr = new int [9];
-	int * ID_Arr = new int[9];
-	int * TLOC_Arr = new int[9];
-	int * MDUR_Arr = new int[9];
-	int * SIG_Arr = new int[9];
 
-	int EventArrInput[9][7] =
-	{
-	{'F', 'P',1, 1, 100, 4, 5},
-	{'F', 'E',1, 2, 100, 4, 5},
-	{'F', 'E',1, 3, 100, 4, 5},
-	{'F', 'P',1, 4, 100, 4, 5},
-	{'F', 'E',1, 5, 100, 4, 5},
-	{'F', 'P',1, 6, 100, 4, 5},
-	{'F', 'E',1, 7, 100, 4, 5},
-	{'F', 'E',1, 8, 100, 4, 5},
-	{'F', 'E',1, 9, 100, 4, 5},
 
-	};
+	//---------------------Initialization Stage---------------------//
+	UI UserInterface; // interface object which reads from input file on construction
+
+	int EmergRovNum = UserInterface.getEmRoverCount();
+	int PolarRovNum = UserInterface.getPolarRoverCount();
+	int NMissionsToCheckup = UserInterface.getCheckCount();
+	int EventSize = UserInterface.getNumberOFEvents();
+
+	//initializing F_Arr (useless event type array)
+	char* F_Arr = new char[EventSize];
 	for (int i = 0; i < EventSize; i++)
 	{
-		F_Arr[i] = EventArrInput[i][0];
-		TYP_Arr[i] = EventArrInput[i][1];
-		ED_Arr[i] = EventArrInput[i][2];
-		ID_Arr[i] = EventArrInput[i][3];
-		TLOC_Arr[i] = EventArrInput[i][4];
-		MDUR_Arr[i] = EventArrInput[i][5];
-		SIG_Arr[i] = EventArrInput[i][6];
+		F_Arr[i] = 'F';//formulation event type
 	}
 	
-	int EmergRovNum = 5;
-	int PolarRovNum = 4;
+	//-----------------Constructing the mars station-------------------//
+	MarsStation TestStation(F_Arr, UserInterface.getMissionType(), UserInterface.getEventDay(), 
+		UserInterface.getID(), UserInterface.getLocation(),UserInterface.getDuration(), UserInterface.getSignifiance(), EventSize,
+		UserInterface.getPolarCheck(), UserInterface.getPolarSpeed(), UserInterface.getEmCheck(),UserInterface.getEmSpeed(), NMissionsToCheckup,
+		EmergRovNum, PolarRovNum);
+	
 
-
-	int CheckupDurPol = 3;
-	int SpeedPol = 10;
-	PrioQueue<Rover> Polar_Rovers;
-	int CheckupDurEmerg = 2;
-	int SpeedEmerg = 12;
-	PrioQueue<Rover> Emerg_Rovers;
-	int NMissionsToCheckup = 2;
-
-	//Constructing the mars station
-	MarsStation TestStation(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, EventSize,
-		CheckupDurPol, SpeedPol, CheckupDurEmerg,SpeedEmerg, NMissionsToCheckup,
-		EmergRovNum,PolarRovNum);
-	for (int i = 0; i < 100; i++)
+	//---------------------Run Simulation---------------------//
+	int ProgMode = UserInterface.getProgMode();
+	
+	if (ProgMode!= 3)
+	for (int i = 0; i < 4; i++) //change limit later
 	{
 		TestStation.SimulateDay();
+		UserInterface.Refresh(&TestStation);
+		if (ProgMode == 1)
+		{
+			UserInterface.Interactive();
+			system("pause");
+		}
+		else if (ProgMode == 2)
+		{
+			UserInterface.Interactive();
+		}
 	}
 
+	if (ProgMode == 3)
+	{
+		//need set limit later
+		for (int i = 0; i < 4; i++)
+		{
+			TestStation.SimulateDay();
+		}
+		//missing simulation 
+		UserInterface.Silent();
+	}
 
+	UserInterface.OutputFile();
+
+	
+	
 }

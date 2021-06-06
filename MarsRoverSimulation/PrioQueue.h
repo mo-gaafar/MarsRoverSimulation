@@ -13,6 +13,28 @@ private:
     int size = 0;
 
 public:
+    //Copy constructor
+    PrioQueue(PrioQueue<T> & Copy) {
+        if (Copy.isEmpty())
+        {
+            //lmao
+        }
+        else {
+            PrioQueue<T> Temp;
+            T Item;
+            int Key;
+            while (dequeue(Item, Key))
+            {
+                Copy.enqueue(Item, Key);
+                Temp.enqueue(Item, Key);
+            }
+            while (dequeue(Item, Key))
+            {
+                enqueue(Item, Key);
+            }
+        }
+
+    }
     PrioQueue() {
         size = 0;
     }
