@@ -3,16 +3,25 @@
   <ItemGroup>
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Rover.h" />
-    <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="MarsStation.h" />
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="ArrQueue.h" />
+    <ClInclude Include="PrioQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\moham\Desktop\bottom.txt" />
   </ItemGroup>
 </Project>

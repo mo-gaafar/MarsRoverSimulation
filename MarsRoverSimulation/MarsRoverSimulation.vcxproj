@@ -139,12 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="ArrQueue.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="MarsStation.h" />
-    <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="Mission.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="LinkedList.h" />
@@ -152,6 +153,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\moham\Desktop\bottom.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

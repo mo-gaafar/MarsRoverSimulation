@@ -19,7 +19,7 @@ public:
 		else
 		{
 			new_NODE->setNext(top);
-			return true
+			return true;
 		}
 		top = new_NODE;
 	}
