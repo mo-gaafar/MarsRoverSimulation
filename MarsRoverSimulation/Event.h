@@ -9,8 +9,9 @@ private:
 	int misssionDur;
 	int sig;
 public:
+	Event();
 	Event(char ev, char typ, int ed, int id, int tloc, int mdur, int s); //If event is formulation
-
+	Event(char ev, int ed, int id);
 	//GETTERS
 	char getET() { return eventType; }
 	char getTYP() { return missionType; }
@@ -22,6 +23,15 @@ public:
 
 	~Event() {}
 };
+Event::Event() {
+	eventType = 0;
+	missionType = 0;
+	eventDate = 0;
+	ID = 0;
+	targetLoc = 0;
+	misssionDur = 0;
+	sig = 0;
+}
 
 Event::Event(char ev, char typ, int ed, int id, int tloc, int mdur, int s) {
 	eventType = ev;

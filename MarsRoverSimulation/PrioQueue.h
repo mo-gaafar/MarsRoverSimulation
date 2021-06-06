@@ -1,7 +1,9 @@
-// C++ implementation of a priority queue
+#pragma once
 
 #include <iostream>
 #include "Node.h"
+#include "Mission.h"
+
 using namespace std;
 template <class T> 
 class PrioQueue {
@@ -11,6 +13,28 @@ private:
     int size = 0;
 
 public:
+    //Copy constructor
+    PrioQueue(PrioQueue<T> & Copy) {
+        if (Copy.isEmpty())
+        {
+            //lmao
+        }
+        else {
+            PrioQueue<T> Temp;
+            T Item;
+            int Key;
+            while (dequeue(Item, Key))
+            {
+                Copy.enqueue(Item, Key);
+                Temp.enqueue(Item, Key);
+            }
+            while (dequeue(Item, Key))
+            {
+                enqueue(Item, Key);
+            }
+        }
+
+    }
     PrioQueue() {
         size = 0;
     }
@@ -95,18 +119,32 @@ public:
     }
 
     // returns the  maximum item of the heap
+    T peek() {
+        if (size)
+        {
+            //key = PrioQ[0].getKey();
+            T Item = PrioQ[0].getItem();
+            return this.Item;
+        }
+        /*else {
+            return nullptr;
+        }*/
+    }
     T peek(int &key) {
         if (size)
+        {
             key = PrioQ[0].getKey();
             return PrioQ[0].getItem();
-        else
+        }
+        /*else {
             return nullptr;
+        }*/
     }
 
     bool isEmpty() {
-        if (size)
-            return false;
-        return true;
+        if (size == 0)
+            return true;
+        return false;
     }
 
     // deletes the max item and return
@@ -146,8 +184,8 @@ public:
     }
 
     T dequeue(int &Key) {
-        if (size == 0)
-            return false;
+       /* if (size == 0)
+            return false;*/
 
         T maxItem;
         maxItem = PrioQ[0].getItem();
@@ -177,5 +215,7 @@ public:
         cout << endl;
     }
 
-   
+
+  
+
 };

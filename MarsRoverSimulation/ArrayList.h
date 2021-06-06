@@ -1,3 +1,4 @@
+#pragma once
 template <class T>
 class ArrayList {
 private:
@@ -28,7 +29,7 @@ public:
 	bool delPos(int pos);
 };
 
-//Implentations
+//Implementations
 
 template <class T>
 ArrayList<T> :: ArrayList(int inMax) {
@@ -39,8 +40,8 @@ ArrayList<T> :: ArrayList(int inMax) {
 
 template <class T>
 bool ArrayList<T> :: addItem(T& iItem) {
-	if (count == maxCount) return false;
-
+	if (count == maxCount) 
+		return false;
 	array[count++] = iItem;
 	count++;
 	return true;
