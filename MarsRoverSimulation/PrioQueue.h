@@ -213,6 +213,10 @@ public:
         return maxItem;
     }
 
+    //Size Getter
+    int getCount() {
+        return size;
+    }
 
     // prints the heap
     void printQueue() {

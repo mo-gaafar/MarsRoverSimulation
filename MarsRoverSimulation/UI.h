@@ -169,7 +169,7 @@ public:
 
 	void Refresh(MarsStation &InputStation) //refreshes data in UI to prepare for output
 	{
-		day = InputStation.GetDay();
+ 		day = InputStation.GetDay();
 		InputStation.GetPolarWaiting_Mission(PolarWaiting_MissionUI);
 		EmergWaiting_MissionUI = InputStation.GetEmergWaiting_Mission();
 		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
@@ -350,14 +350,13 @@ public:
 
 	void OutputParameters()
 	{
-		NumberOfWaiting = count(PolarWaiting_MissionUI) + count(EmergWaiting_MissionUI);
-		NumberOfInExecution = count(InExecutionEmerg) + count(InExecutionPolar);
-		NumberOfAvailable = count(AvailableEmerg_Rover) + count(AvailablePol_Rover);
-		NumberOfInCheckup = count(InCheckup_Emerg) + count(InCheckup_Pol);
-		NumberOfCompleted = count(CompletedEmerg) + count(CompletedPolar);
-	}
-	
+		NumberOfWaiting = PolarWaiting_MissionUI.getCount() + EmergWaiting_MissionUI.getCount();
+		NumberOfInExecution = InExecutionEmerg.getCount() + InExecutionPolar.getCount();
+		NumberOfAvailable = AvailableEmerg_Rover.getCount() + AvailablePol_Rover.getCount();
+		NumberOfInCheckup = InCheckup_Emerg.getCount() + InCheckup_Pol.getCount();
+		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
 
+	}
 
 	void Interactive()   // RUNS INTERACTIVE
 	{

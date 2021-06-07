@@ -109,7 +109,10 @@ public:
 		}
 	}
 
-
+	int getCount()
+	{
+		return rear + 1;
+	}
 	T peek() {
 		
 		/*if (isempty())
