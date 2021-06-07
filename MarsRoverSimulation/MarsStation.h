@@ -206,9 +206,9 @@ void MarsStation::Execute() {
 			Rover R;
 			R = Pol_Rover.dequeue(key);
 			cout << key << endl;
-			Priority = day + 2*(R.getSpeed()+M.getTLOC())+ M.getMDUR();
+			Priority = day + 2*(M.getTLOC()/R.getSpeed())+ M.getMDUR();
 			InExecution.enqueue(M, Priority);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else
@@ -223,9 +223,9 @@ void MarsStation::Execute() {
 			M = EmergWaiting_Mission.dequeue(key);
 			Rover R;
 			R = Emerg_Rover.dequeue(key);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			InExecution.enqueue(M, Priority);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else {
