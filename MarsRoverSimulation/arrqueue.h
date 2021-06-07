@@ -39,6 +39,19 @@ public:
 		front = -1;
 		rear = -1;
 	}
+
+	ArrQueue<T>& operator = (ArrQueue<T>& q) {
+		ArrQueue<T> temp;
+		T st;
+		while (dequeue(st))
+			temp.enqueue(st);
+		while (temp.dequeue(st)) {
+			enqueue(st);
+			q.enqueue(st);
+		}
+		return *this;
+	}
+
 	bool isempty() {
 		if (rear == -1 && front == -1)
 			return true;
@@ -64,7 +77,7 @@ public:
 
 		}
 	}
-	T& const dequeue() {
+	T const dequeue() {
 		if (isempty()) 
 		{
 			//return false;
