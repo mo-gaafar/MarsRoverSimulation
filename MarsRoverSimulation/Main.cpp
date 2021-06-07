@@ -29,7 +29,6 @@ int main() {
 		UserInterface.getPolarCheck(), UserInterface.getPolarSpeed(), UserInterface.getEmCheck(),UserInterface.getEmSpeed(), NMissionsToCheckup,
 		EmergRovNum, PolarRovNum);
 	
-
 	//---------------------Run Simulation---------------------//
 	int ProgMode = UserInterface.getProgMode();
 	

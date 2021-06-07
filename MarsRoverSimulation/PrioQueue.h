@@ -17,7 +17,7 @@ public:
     PrioQueue(PrioQueue<T> & Copy) {
         if (Copy.isEmpty())
         {
-            //lmao
+            //nothing
         }
         else {
             PrioQueue<T> Temp;
@@ -28,13 +28,25 @@ public:
                 Copy.enqueue(Item, Key);
                 Temp.enqueue(Item, Key);
             }
-            while (dequeue(Item, Key))
+            while (Temp.dequeue(Item, Key))
             {
                 enqueue(Item, Key);
             }
         }
 
     }
+    //op overload of assignment operator
+    void operator =(const PrioQueue& Copy)
+    {
+        for (int i = 0; i < Capacity; i++)
+        {
+            PrioQ[i] = Copy.PrioQ[i];
+        }
+       size = Copy.size;
+       
+    }
+
+    //Default constructor
     PrioQueue() {
         size = 0;
     }

@@ -12,8 +12,8 @@ private:
   //--------------Zeyad's Declarations- -------//
 	int ProgMode;
 	int day;
-	ArrQueue<Mission> PolarWaiting_Mission;
-	PrioQueue<Mission> EmergWaiting_Mission;
+	ArrQueue<Mission> PolarWaiting_MissionUI;
+	PrioQueue<Mission> EmergWaiting_MissionUI;
 	PrioQueue<Mission> InExecutionEmerg;
 	PrioQueue<Mission> InExecutionPolar;
 	PrioQueue<Rover> Busy_RoversEmerg;
@@ -170,8 +170,8 @@ public:
 	void Refresh(MarsStation &InputStation) //refreshes data in UI to prepare for output
 	{
 		day = InputStation.GetDay();
-		InputStation.GetPolarWaiting_Mission(PolarWaiting_Mission);
-		EmergWaiting_Mission = InputStation.GetEmergWaiting_Mission();
+		InputStation.GetPolarWaiting_Mission(PolarWaiting_MissionUI);
+		EmergWaiting_MissionUI = InputStation.GetEmergWaiting_Mission();
 		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
 		InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
 		AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
@@ -278,6 +278,7 @@ public:
 	{
 		Rover Item;
 		int count = 0;
+		ArrQueue<Rover> Temp;
 
 		while (Q.dequeue(Item))
 			count++;
@@ -287,10 +288,20 @@ public:
 	int count(PrioQueue<Rover>& Q)
 	{
 		Rover Item;
+		int Key;
+		PrioQueue<Rover> Temp;
+
 		int count = 0;
 
-		while (Q.dequeue(Item))
+		while (Q.dequeue(Item, Key))
+		{
+			Temp.enqueue(Item, Key);
 			count++;
+		}
+		while (Temp.dequeue(Item, Key))
+		{
+			Q.enqueue(Item, Key);
+		}
 		return count;
 	}
 
@@ -307,10 +318,19 @@ public:
 	int count(PrioQueue<Mission>& Q)
 	{
 		Mission Item;
+		int Key;
 		int count = 0;
+		PrioQueue<Mission> Temp;
 
-		while (Q.dequeue(Item))
+		while (Q.dequeue(Item,Key))
+		{
+			Temp.enqueue(Item, Key);
 			count++;
+		}
+		while (Temp.dequeue(Item, Key))
+		{
+			Q.enqueue(Item, Key);
+		}
 		return count;
 	}
 	
@@ -330,7 +350,7 @@ public:
 
 	void OutputParameters()
 	{
-		NumberOfWaiting = count(PolarWaiting_Mission) + count(EmergWaiting_Mission);
+		NumberOfWaiting = count(PolarWaiting_MissionUI) + count(EmergWaiting_MissionUI);
 		NumberOfInExecution = count(InExecutionEmerg) + count(InExecutionPolar);
 		NumberOfAvailable = count(AvailableEmerg_Rover) + count(AvailablePol_Rover);
 		NumberOfInCheckup = count(InCheckup_Emerg) + count(InCheckup_Pol);
@@ -342,16 +362,17 @@ public:
 	void Interactive()   // RUNS INTERACTIVE
 	{
 		OutputParameters();
+		cout << endl;
 		cout << "Current Day: " << day << endl;
-		cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_Mission); cout << "] " << "("; printID(PolarWaiting_Mission); cout << ") " << endl;
+		cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_MissionUI); cout << "] " << "("; printID(PolarWaiting_MissionUI); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfInExecution << "In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
+		cout << NumberOfInExecution << " In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfAvailable << "Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
+		cout << NumberOfAvailable << " Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfInCheckup << "In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
+		cout << NumberOfInCheckup << " In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfCompleted << "Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
+		cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	}
 
 	void Silent()

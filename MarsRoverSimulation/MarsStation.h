@@ -172,6 +172,7 @@ void MarsStation::Formulate() {
 	bool check = true;
 	while (check) {
 		// if the mission is to be formulated today, 
+		int Debug = EventList.peek().getED();
 		if (EventList.peek().getED() == day && !EventList.isempty() ) {
 			if (EventList.peek().getTYP() == 'P') {
 				Mission M(EventList.peek().getED(), 'P', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());

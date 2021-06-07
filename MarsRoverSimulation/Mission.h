@@ -25,7 +25,7 @@ public:
 		missionDur = m.getMDUR();
 		sig = m.getSIG();
 		ID = m.getID();
-		completionDay = -1;
+		completionDay = m.getCompletionDay();
 	}
 	 Mission() {
 		formulationDay = 0;
