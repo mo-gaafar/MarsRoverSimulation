@@ -118,13 +118,13 @@ public:
 		}
 		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
-			Rover R('E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
+			Rover R(i, 'E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
 			//Emerg_Rover.dequeue(R);
 			Emerg_Rover.enqueue(R, SpeedEmerg); //------------------------------------------------------------------------------------------------> review this
 		}
 		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {
-			Rover R('P', CheckupDurPol, SpeedPol,NMissionsToCheckup);
+			Rover R(i, 'P', CheckupDurPol, SpeedPol,NMissionsToCheckup);
 			Pol_Rover.enqueue(R, SpeedPol);
 		}
 	}
@@ -175,12 +175,12 @@ void MarsStation::Formulate() {
 		int Debug = EventList.peek().getED();
 		if (EventList.peek().getED() == day && !EventList.isempty() ) {
 			if (EventList.peek().getTYP() == 'P') {
-				Mission M(EventList.peek().getED(), 'P', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
+				Mission M(EventList.peek().getED(), 'P', EventList.peek().getID(), EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
 				PolarWaiting_Mission.enqueue(M);
 				EventList.dequeue(); //dequeue from eventlist after formulation
 			}
 			else if(EventList.peek().getTYP() ==  'E'){
-				Mission M(EventList.peek().getED(), 'E', EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
+				Mission M(EventList.peek().getED(), 'E', EventList.peek().getID(), EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
 				int Priority = M.getSIG();
 				EmergWaiting_Mission.enqueue(M, Priority);
 				EventList.dequeue(); //dequeue from eventlist after formulation
@@ -203,9 +203,9 @@ void MarsStation::Execute() {
 			M = PolarWaiting_Mission.dequeue();
 			Rover R;
 			R = Pol_Rover.dequeue(key);
-			Priority = day + 2*(R.getSpeed()+M.getTLOC())+ M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			InExecution.enqueue(M, Priority);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else
@@ -220,9 +220,9 @@ void MarsStation::Execute() {
 			M = EmergWaiting_Mission.dequeue(key);
 			Rover R;
 			R = Emerg_Rover.dequeue(key);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			InExecution.enqueue(M, Priority);
-			Priority = day + 2 * (R.getSpeed() + M.getTLOC()) + M.getMDUR();
+			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			Busy_Rovers.enqueue(R, Priority);
 		}
 		else {
