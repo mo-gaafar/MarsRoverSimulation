@@ -39,7 +39,7 @@ public:
 
 	Mission& operator = (const Mission & m) {
 		
-		formulationDay = m.formulationDay;
+		formulationDay = m.getFD();
 		missionType = m.missionType;
 		targetLoc = m.targetLoc;
 		missionDur = m.missionDur;

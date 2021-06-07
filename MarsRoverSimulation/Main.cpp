@@ -1,5 +1,6 @@
 #include<iostream>
 //#include"MarsStation.h"
+#include <Windows.h>
 #include "PrioQueue.h"
 #include "MarsStation.h"
 #include "ArrayList.h"
@@ -30,36 +31,39 @@ int main() {
 		EmergRovNum, PolarRovNum);
 	
 	//---------------------Run Simulation---------------------//
-	int ProgMode = UserInterface.getProgMode();
-	
-	if (ProgMode!= 3)
-	for (int i = 0; i < 4; i++) //change limit later
-	{
-		TestStation.SimulateDay();
-		UserInterface.Refresh(TestStation);
-		if (ProgMode == 1)
-		{
-			UserInterface.Interactive();
-			system("pause");
-		}
-		else if (ProgMode == 2)
-		{
-			UserInterface.Interactive();
-		}
-	}
+	//int ProgMode = UserInterface.getProgMode();
+	//
+	//if (ProgMode!= 3)
+	//for (int i = 0; i < 20; i++) //change limit later
+	//{
+	//	TestStation.SimulateDay();
+	//	UserInterface.Refresh(TestStation);
+	//	if (ProgMode == 1)
+	//	{
+	//		UserInterface.Interactive();
+	//		system("pause");
+	//	}
+	//	else if (ProgMode == 2)
+	//	{
+	//		UserInterface.Interactive();
+	//		Sleep(1000);
+	//	}
+	//}
 
-	if (ProgMode == 3)
-	{
-		//need set limit later
-		for (int i = 0; i < 4; i++)
-		{
-			TestStation.SimulateDay();
-		}
-		//missing simulation 
-		UserInterface.Silent();
-	}
+	//if (ProgMode == 3)
+	//{
+	//	//need set limit later
+	//	for (int i = 0; i < 20; i++)
+	//	{
+	//		TestStation.SimulateDay();
+	//	}
+	//	//missing simulation 
+	//	UserInterface.Silent();
+	//}
 
-	UserInterface.OutputFile();
+	//UserInterface.OutputFile();
+
+	TestStation.Run();
 
 	
 	

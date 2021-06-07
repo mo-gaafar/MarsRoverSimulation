@@ -1,0 +1,17 @@
+﻿Visual Micro License has expired, or is not valid for this version.   [Tip: Press CTRL + Click to open links]
+
+This could happen for the following reasons:  -
+- You purchased an Annual / Yearly license 12 months ago.
+Please Visit our Shop to purchase a New License at - https://www.visualmicro.com/page/shop.aspx
+
+- Your Trial has Ended
+Please Visit our Shop to purchase a Full License at - https://www.visualmicro.com/page/shop.aspx
+
+- If you have a perpetual license, And have run out of support
+Please Visit our Shop to purchase Support at - https://www.visualmicro.com/page/shop.aspx#licInfo
+
+- If you have support, And have re-installed your Operating System, Or have changed PC, Or don't expect license expiry:
+Please contact us via email at mailto:license@visualmicro.com, with your license key, And any additional information you can provide.
+
+- If you want to Uninstall the Visual Micro Extension please see:
+https://www.visualmicro.com/page/How-to-uninstall-the-arduino-addin-for-visual-studio.aspx

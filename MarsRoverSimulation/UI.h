@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "../MarsRoverSimulation/MarsStation.h"
+//#include "../MarsRoverSimulation/MarsStation.h"
 #include <fstream>
 using namespace std;
 
@@ -11,7 +11,7 @@ private:
 
   //--------------Zeyad's Declarations- -------//
 	int ProgMode;
-	int day;
+	/*int day;
 	ArrQueue<Mission> PolarWaiting_MissionUI;
 	PrioQueue<Mission> EmergWaiting_MissionUI;
 	PrioQueue<Mission> InExecutionEmerg;
@@ -32,7 +32,7 @@ private:
 	int NumberOfCompleted;
 
 	int NumberOfEmergRovers;
-	int NumberOfPolarRovers;
+	int NumberOfPolarRovers;*/
   
   //--------------------------Hassan's declarations-------------------------------//
   //MarsStation* marsstaion;
@@ -164,34 +164,34 @@ public:
 	UI() //Default Constructor
 	{
 		Read();// fills the UI up for the first time
-		ProgramMode();
+		//ProgramMode();
 	}
 
-	void Refresh(MarsStation &InputStation) //refreshes data in UI to prepare for output
-	{
- 		day = InputStation.GetDay();
-		InputStation.GetPolarWaiting_Mission(PolarWaiting_MissionUI);
-		EmergWaiting_MissionUI = InputStation.GetEmergWaiting_Mission();
-		InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
-		InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
-		AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
-		AvailablePol_Rover = InputStation.GetAvailablePol_Rover();
-		InputStation.GetInCheckup_Emerg(InCheckup_Emerg);
-		InputStation.GetInCheckup_Pol(InCheckup_Pol);
-		InputStation.GetCompletedMissions(CompletedEmerg, CompletedPolar);
+	//void Refresh(MarsStation &InputStation) //refreshes data in UI to prepare for output
+	//{
+ //		day = InputStation.GetDay();
+	//	InputStation.GetPolarWaiting_Mission(PolarWaiting_MissionUI);
+	//	EmergWaiting_MissionUI = InputStation.GetEmergWaiting_Mission();
+	//	InputStation.GetInExecution(InExecutionEmerg, InExecutionPolar);
+	//	InputStation.GetBusy_Rovers(Busy_RoversEmerg, Busy_RoversPolar);
+	//	AvailableEmerg_Rover = InputStation.GetAvailableEmerg_Rover();
+	//	AvailablePol_Rover = InputStation.GetAvailablePol_Rover();
+	//	InputStation.GetInCheckup_Emerg(InCheckup_Emerg);
+	//	InputStation.GetInCheckup_Pol(InCheckup_Pol);
+	//	InputStation.GetCompletedMissions(CompletedEmerg, CompletedPolar);
 
-		NumberOfWaiting = 0;
-		NumberOfInExecution = 0;
-		NumberOfAvailable = 0;
-		NumberOfInCheckup = 0;
-		NumberOfCompleted = 0;
-	}
+	//	NumberOfWaiting = 0;
+	//	NumberOfInExecution = 0;
+	//	NumberOfAvailable = 0;
+	//	NumberOfInCheckup = 0;
+	//	NumberOfCompleted = 0;
+	//}
 
 
 	// OUTPUT
 
 	//---------------- OUTPUT FILE ---------------------//    INCOMPLETE
-	void OutputFile()
+	/*void OutputFile()
 	{
 		ofstream Output;
 		Mission Item;
@@ -209,7 +209,7 @@ public:
 		Output << "Missions: " << NumberOfCompleted << " [P: " << count(CompletedPolar) << ", E: " << count(CompletedEmerg) << "]" << endl;
 		Output << "Rovers: " << NumberOfEmergRovers + NumberOfPolarRovers << " [P: " << NumberOfPolarRovers << ", E: " << NumberOfEmergRovers << "]" << endl;
 		Output.close();
-	}
+	}*/
 
 
 	//-----------------------------  PRINT FUNCTIONS  -----------------------------------------//
@@ -220,52 +220,82 @@ public:
 	//    ArrQueue ROVER PRINT   //
 	void printID(ArrQueue<Rover>& Q)
 	{
+		ArrQueue <Rover> Temp;
 		Rover Item;
 
 		Q.dequeue(Item);
 		cout << Item.getID();
+		Temp.enqueue(Item);
 
 		while (Q.dequeue(Item))
+		{
 			cout << "," << Item.getID();
+			Temp.enqueue(Item);
+		}
+		while (Temp.dequeue(Item))
+			Q.enqueue(Item);
 	}
 
 
 	//    PrioQueue ROVER PRINT   //
 	void printID(PrioQueue<Rover>& Q)
 	{
+		PrioQueue <Rover> Temp;
 		Rover Item;
+		int key;
 
-		Q.dequeue(Item);
+		Q.dequeue(Item, key);
 		cout << Item.getID();
+		Temp.enqueue(Item, key);
 
-		while (Q.dequeue(Item))
+		while (Q.dequeue(Item, key))
+		{
 			cout << "," << Item.getID();
+			Temp.enqueue(Item, key);
+		}
+		while (Temp.dequeue(Item, key))
+			Q.enqueue(Item, key);
 	}
 
 
 	//    ArrQueue MISSION PRINT    //
 	void printID(ArrQueue<Mission>& Q)
 	{
+		ArrQueue <Mission> Temp;
 		Mission Item;
 
 		Q.dequeue(Item);
 		cout << Item.getID();
+		Temp.enqueue(Item);
 
 		while (Q.dequeue(Item))
+		{
 			cout << "," << Item.getID();
+			Temp.enqueue(Item);
+		}
+		while (Temp.dequeue(Item))
+			Q.enqueue(Item);
 	}
 
 
 	//   PrioQueue MISSION PRINT   //
 	void printID(PrioQueue<Mission>& Q)
 	{
+		PrioQueue <Mission> Temp;
 		Mission Item;
+		int key;
 
-		Q.dequeue(Item);
+		Q.dequeue(Item, key);
 		cout << Item.getID();
+		Temp.enqueue(Item, key);
 
-		while (Q.dequeue(Item))
+		while (Q.dequeue(Item, key))
+		{
 			cout << "," << Item.getID();
+			Temp.enqueue(Item, key);
+		}
+		while (Temp.dequeue(Item, key))
+			Q.enqueue(Item, key);
 	}
 
 	// END OF PRINT FUNCTIONS //
@@ -274,7 +304,7 @@ public:
 
 
 	//-----------------------------  COUNTER FUNCTIONS  -----------------------------------------//
-	int count(ArrQueue<Rover>& Q)
+	/*int count(ArrQueue<Rover>& Q)
 	{
 		Rover Item;
 		int count = 0;
@@ -332,7 +362,7 @@ public:
 			Q.enqueue(Item, Key);
 		}
 		return count;
-	}
+	}*/
 	
 	//---------------------------------------------------------------------------------------------------------------//
 
@@ -348,7 +378,7 @@ public:
 	}
 
 
-	void OutputParameters()
+	/*void OutputParameters()
 	{
 		NumberOfWaiting = PolarWaiting_MissionUI.getCount() + EmergWaiting_MissionUI.getCount();
 		NumberOfInExecution = InExecutionEmerg.getCount() + InExecutionPolar.getCount();
@@ -356,22 +386,38 @@ public:
 		NumberOfInCheckup = InCheckup_Emerg.getCount() + InCheckup_Pol.getCount();
 		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
 
-	}
+	}*/
 
-	void Interactive()   // RUNS INTERACTIVE
+	//void Interactive(int day, int waiting, PrioQueue<Mission> EmergW, ArrQueue<Mission> PolarW, int InExecution, PrioQueue<Mission> EmergI, PrioQueue<Mission> PolarI, int available, PrioQueue<Rover> EmergA, PrioQueue<Rover> PolarA, int InCheckup, ArrQueue<Rover> EmergIc, ArrQueue<Rover> PolarIc, int completed, ArrQueue<Mission> EmergC, ArrQueue<Mission> PolarC)   // RUNS INTERACTIVE
+	//{
+	//	OutputParameters();
+	//	cout << endl;
+	//	cout << "Current Day: " << day << endl;
+	//	cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_MissionUI); cout << "] " << "("; printID(PolarWaiting_MissionUI); cout << ") " << endl;
+	//	cout << "-------------------------------------------------------" << endl;
+	//	cout << NumberOfInExecution << " In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
+	//	cout << "-------------------------------------------------------" << endl;
+	//	cout << NumberOfAvailable << " Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
+	//	cout << "-------------------------------------------------------" << endl;
+	//	cout << NumberOfInCheckup << " In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
+	//	cout << "-------------------------------------------------------" << endl;
+	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
+	//}
+
+	void Interactive(int Day, int waiting, PrioQueue<Mission>& EmergW, ArrQueue<Mission>& PolarW, int InExecution, PrioQueue<Mission>& EmergI, PrioQueue<Mission>& PolarI, int available, PrioQueue<Rover>& EmergA, PrioQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
 	{
-		OutputParameters();
+		//OutputParameters();
 		cout << endl;
-		cout << "Current Day: " << day << endl;
-		cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_MissionUI); cout << "] " << "("; printID(PolarWaiting_MissionUI); cout << ") " << endl;
+		cout << "Current Day: " << Day << endl;
+		cout << waiting << " Waiting Missions: " << "[";  printID(EmergW); cout << "] " << "("; printID(PolarW); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfInExecution << " In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
+		cout << InExecution << " In-Execution Missions/Rovers: " << "["; printID(EmergI); cout << "] " << "(";  printID(PolarI); cout << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfAvailable << " Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
+		cout << available << " Available Rovers: " << "["; printID(EmergA); cout << "] " << "("; printID(PolarA); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfInCheckup << " In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
+		cout << InCheckup << " In-Checkup Rovers: " << "["; printID(EmergIc); cout << "] " << "("; printID(PolarIc); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
+		cout << completed << " Completed Missions: " << "["; printID(EmergC); cout << "] " << "("; printID(PolarC); cout << ") " << endl;
 	}
 
 	void Silent()
