@@ -1,4 +1,5 @@
 #pragma once
+#include<iostream>
 #include"Rover.h"
 
 class Mission {
@@ -17,7 +18,7 @@ private:
 
 
 public:
-	Mission(int f, char mt, int tl, int md, int s); //Initialization
+	Mission(int f, char mt, int id, int tl, int md, int s); //Initialization
 	Mission(Mission const &m) {  //Copy constructor
 		formulationDay = m.getFD();
 		missionType = m.getTYP();
@@ -81,9 +82,10 @@ public:
 	~Mission() {}
 };
 
-Mission::Mission(int f, char mt, int tl, int md, int s) {
+Mission::Mission(int f, char mt, int id, int tl, int md, int s) {
 	formulationDay = f;
 	missionType = mt;
+	ID = id;
 	targetLoc = tl;
 	missionDur = md;
 	sig = s;

@@ -14,7 +14,7 @@ private:
 
 public:
 	//Used in Initialiaztion 
-	Rover(char t, int cd, int s, int cmn) {
+	Rover(int id, char t, int cd, int s, int cmn) {
 		roverType = t;
 		checkupDur = cd;
 		speed = s;
@@ -22,6 +22,7 @@ public:
 		inCheckDays = -1;
 		missionNo = 0;
 		inMaintenanceDay = 0;
+		ID = id;
 	}
 	//Copy constructor
 	Rover(Rover const & r) {

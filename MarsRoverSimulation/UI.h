@@ -274,7 +274,7 @@ public:
 
 
 	//-----------------------------  COUNTER FUNCTIONS  -----------------------------------------//
-	int count(ArrQueue<Rover>& Q)
+	int count(ArrQueue<Rover> Q)
 	{
 		Rover Item;
 		int count = 0;
@@ -285,7 +285,7 @@ public:
 		return count;
 	}
 
-	int count(PrioQueue<Rover>& Q)
+	int count(PrioQueue<Rover> Q)
 	{
 		Rover Item;
 		int Key;
@@ -305,7 +305,7 @@ public:
 		return count;
 	}
 
-	int count(ArrQueue<Mission>& Q)
+	int count(ArrQueue<Mission> Q)
 	{
 		Mission Item;
 		int count = 0;
@@ -315,7 +315,7 @@ public:
 		return count;
 	}
 
-	int count(PrioQueue<Mission>& Q)
+	int count(PrioQueue<Mission> Q)
 	{
 		Mission Item;
 		int Key;
