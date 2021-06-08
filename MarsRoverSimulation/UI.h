@@ -1,5 +1,8 @@
 #pragma once
 #include <iostream>
+#include <string>
+#include "string.h"
+#include <string.h>
 
 //#include "../MarsRoverSimulation/MarsStation.h"
 #include <fstream>
@@ -365,12 +368,12 @@ public:
 	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	//}
 
-	void Interactive(int Day, int waiting, ArrQueue<Mission>& EmergW, ArrQueue<Mission>& PolarW, int InExecution, ArrQueue<Mission>& EmergI, ArrQueue<Mission>& PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
+	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, ArrQueue<Mission>& EmergI, ArrQueue<Mission>& PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
 	{
 		//OutputParameters();
 		cout << endl;
 		cout << "Current Day: " << Day << endl;
-		cout << waiting << " Waiting Missions: " << "[";  printID(EmergW); cout << "] " << "("; printID(PolarW); cout << ") " << endl;
+		cout << waiting << " Waiting Missions: " << "[" <<  EmergW << "] " << "(" << PolarW << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
 		cout << InExecution << " In-Execution Missions/Rovers: " << "["; printID(EmergI); cout << "] " << "(";  printID(PolarI); cout << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;

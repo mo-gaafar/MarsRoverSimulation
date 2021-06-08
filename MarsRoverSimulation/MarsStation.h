@@ -7,6 +7,9 @@
 #include"Mission.h"
 #include"Event.h"
 #include "UI.h"
+#include <string>
+#include "string.h"
+#include <string.h>
 
 
 using namespace std;
@@ -103,7 +106,18 @@ public:
 		//ArrQueue<Event> EventList(EventSize);
 		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, CheckupDurPol, SpeedPol,
 			CheckupDurEmerg, SpeedEmerg,  NMissionsToCheckup);
-
+		Rover R;
+		ArrQueue<Rover> Temp;
+		int idp = 0;
+		int ide = 0;
+		while (Pol_Rover.dequeue(R))
+		{
+			R.setID(idp + 1);
+			idp++;
+			Temp.enqueue(R);
+		}
+		while (Temp.dequeue(R))
+			Pol_Rover.enqueue(R);
 	}
 	
 	//Getting EventList and Rover Queues Ready
@@ -141,6 +155,15 @@ public:
 		Complete();
 		CheckUp();
 		Maintenance();
+		Rover R;
+		ArrQueue<Rover> Temp;
+		while (Emerg_Rover.dequeue(R))
+		{
+			cout << R.getID() << endl;
+			Temp.enqueue(R);
+		}
+		while (Temp.dequeue(R))
+			Emerg_Rover.enqueue(R);
 		day++;
 	}
 
@@ -180,39 +203,40 @@ public:
 		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
 
 	}*/
+	string CreateString(ArrQueue<Mission>& M)
+	{
+		string EmerA = "";
+		Mission R;
+		ArrQueue<Mission> temp;
+		EmergWaiting_Mission.dequeue(R);
+		if (R.getID() != 0)
+		{
+			temp.enqueue(R);
+
+			EmerA += to_string(R.getID());
+			while (EmergWaiting_Mission.dequeue(R)) {
+
+				temp.enqueue(R);
+				EmerA += ", ";
+				EmerA += to_string(R.getID());
+			}
+			while (temp.dequeue(R))
+				EmergWaiting_Mission.enqueue(R);
+		}
+		return EmerA;
+	}
 
 	void Run()
 	{
 		//ui.ProgramMode();
 		for (int i = 0; i < 20; i++)
 		{
+			
 			SimulateDay();
-			/*string EmerA = "l";
-			string PolA = "l";
-			Rover R;
-			ArrQueue<Rover> temp;
-			Emerg_Rover.dequeue(R);
-			temp.enqueue(R);
-			EmerA += R.getID();
-			while (Emerg_Rover.dequeue(R)) {
-				temp.enqueue(R);
-				EmerA += ", ";
-				EmerA += R.getID();
-			}
-			while (temp.dequeue(R))
-				Emerg_Rover.enqueue(R);
-			Pol_Rover.dequeue(R);
-			temp.enqueue(R);
-			PolA += R.getID();
-			while (Pol_Rover.dequeue(R)) {
-				temp.enqueue(R);
-				PolA += ", ";
-				PolA += R.getID();
-			}
-			while (temp.dequeue(R))
-				Pol_Rover.enqueue(R);*/
+			string EmerA = CreateString(EmergWaiting_Mission);
+			string PolA = CreateString(PolarWaiting_Mission);
 			//PrioQueue <Mission> EI = GetEmergInExecution();
-			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmergWaiting_Mission, PolarWaiting_Mission, InExecution.getCount(), InExecution, InExecution, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), CompletedMissions, CompletedMissions);
+			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerA, PolA, InExecution.getCount(), InExecution, InExecution, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), CompletedMissions, CompletedMissions);
 		}
 	}
 
@@ -251,6 +275,7 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
+		cout << Pol_Rover.peek().getID() << endl;
 		if (Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
