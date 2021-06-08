@@ -203,7 +203,7 @@ public:
 		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
 
 	}*/
-	string CreateString(ArrQueue<Mission>& M)
+	string CreateStringEmergW(ArrQueue<Mission>& M)
 	{
 		string EmerA = "";
 		Mission R;
@@ -225,7 +225,29 @@ public:
 		}
 		return EmerA;
 	}
+	string CreateStringPolW(ArrQueue<Mission>& M)
+	{
+		string EmerA = "";
+		Mission R;
+		ArrQueue<Mission> temp;
+		PolarWaiting_Mission.dequeue(R);
+		if (R.getID() != 0)
+		{
+			temp.enqueue(R);
 
+			EmerA += to_string(R.getID());
+			while (PolarWaiting_Mission.dequeue(R)) {
+
+				temp.enqueue(R);
+				EmerA += ", ";
+				EmerA += to_string(R.getID());
+			}
+			while (temp.dequeue(R))
+				PolarWaiting_Mission.enqueue(R);
+		}
+		return EmerA;
+
+	}
 	void Run()
 	{
 		//ui.ProgramMode();
@@ -233,8 +255,8 @@ public:
 		{
 			
 			SimulateDay();
-			string EmerA = CreateString(EmergWaiting_Mission);
-			string PolA = CreateString(PolarWaiting_Mission);
+			string EmerA = CreateStringEmergW(EmergWaiting_Mission);
+			string PolA = CreateStringPolW(PolarWaiting_Mission);
 			//PrioQueue <Mission> EI = GetEmergInExecution();
 			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerA, PolA, InExecution.getCount(), InExecution, InExecution, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), CompletedMissions, CompletedMissions);
 		}
