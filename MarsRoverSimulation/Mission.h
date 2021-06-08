@@ -46,6 +46,7 @@ public:
 		missionDur = m.missionDur;
 		sig = m.sig;
 		ID = m.ID;
+		key = m.key;
 		completionDay = m.completionDay;
 		return *this;
 	}

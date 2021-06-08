@@ -94,7 +94,6 @@ public:
 			Signifiance[i] = -1;
 		}*/
 
-
 		}
 	input.close();
 	}
@@ -368,20 +367,20 @@ public:
 	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	//}
 
-	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, ArrQueue<Mission>& EmergI, ArrQueue<Mission>& PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
+	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, string EmergI, string PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, string EmergC, string & PolarC)   // RUNS INTERACTIVE
 	{
 		//OutputParameters();
 		cout << endl;
 		cout << "Current Day: " << Day << endl;
 		cout << waiting << " Waiting Missions: " << "[" <<  EmergW << "] " << "(" << PolarW << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << InExecution << " In-Execution Missions/Rovers: " << "["; printID(EmergI); cout << "] " << "(";  printID(PolarI); cout << ") " << endl; // Incomplete
+		cout << InExecution << " In-Execution Missions/Rovers: " << "[" << EmergI << "] " << "(" << PolarI << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;
 		cout << available << " Available Rovers: " << "["; printID(EmergA); cout << "] " << "("; printID(PolarA); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
 		cout << InCheckup << " In-Checkup Rovers: " << "["; printID(EmergIc); cout << "] " << "("; printID(PolarIc); cout << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << completed << " Completed Missions: " << "["; printID(EmergC); cout << "] " << "("; printID(PolarC); cout << ") " << endl;
+		cout << completed << " Completed Missions: " << "[" << EmergC << "] " << "(" << PolarC << ") " << endl;
 	}
 
 	void Silent()

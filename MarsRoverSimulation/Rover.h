@@ -63,6 +63,7 @@ public:
 		inCheckDays = r.inCheckDays;
 		missionNo = r.missionNo;
 		inMaintenanceDay = r.inMaintenanceDay;
+		key = r.key;
 		return *this;
 	}
 

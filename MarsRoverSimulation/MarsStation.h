@@ -150,7 +150,7 @@ public:
 		ArrQueue<Rover> Temp;
 		while (Emerg_Rover.dequeue(R))
 		{
-			cout << R.getSpeed() << endl;
+			//cout << R.getSpeed() << endl;
 			Temp.enqueue(R);
 		}
 		while (Temp.dequeue(R))
@@ -194,8 +194,7 @@ public:
 		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
 
 	}*/
-	string CreateStringEmergW(ArrQueue<Mission>& M)
-	{
+	string CreateStringEmergW() {
 		string EmerA = "";
 		Mission R;
 		ArrQueue<Mission> temp;
@@ -216,7 +215,7 @@ public:
 		}
 		return EmerA;
 	}
-	string CreateStringPolW(ArrQueue<Mission>& M)
+	string CreateStringPolW()
 	{
 		string EmerA = "";
 		Mission R;
@@ -239,6 +238,138 @@ public:
 		return EmerA;
 
 	}
+
+	string CreateStringPolInE()
+	{
+		string EmerA = "";
+		Mission M;
+		Rover R;
+		ArrQueue<Rover> tempR;
+		ArrQueue<Mission> temp;
+		//InExecution.dequeue(M);
+		//Busy_Rovers.dequeue(R);
+		//if (M.getID() != 0)
+		{
+			//temp.enqueue(M);
+			//tempR.enqueue(R);
+			//if (M.getTYP() == 'P')
+			//{
+			//	//cout << "k" << M.getID() << endl;
+			//	EmerA += to_string(M.getID());
+			//	EmerA += "/";
+			//	EmerA += to_string(R.getID());
+			//}
+			while (InExecution.dequeue(M) && Busy_Rovers.dequeue(R)) {
+
+				temp.enqueue(M);
+				tempR.enqueue(R);
+				if (M.getTYP() != 'E')
+				{
+					EmerA += ", ";
+					EmerA += to_string(M.getID());
+					EmerA += "/";
+					EmerA += to_string(R.getID());
+				}
+			}
+			while (temp.dequeue(M) && tempR.dequeue(R))
+			{
+				InExecution.enqueue(M);
+				Busy_Rovers.enqueue(R);
+			}
+		}
+		return EmerA;
+
+	}
+
+	string CreateStringce()
+	{
+		string EmerA = "";
+		Mission M;
+		ArrQueue<Mission> temp;
+
+		while (CompletedMissions.dequeue(M))
+		{
+			if (M.getTYP() == 'E')
+			{
+				temp.enqueue(M);
+				EmerA += ", ";
+				EmerA += to_string(M.getID());
+			}
+			else
+				temp.enqueue(M);
+
+		}
+		while (temp.dequeue(M))
+			CompletedMissions.enqueue(M);
+		return EmerA;
+	}
+
+	string CreateStringcp()
+	{
+		string EmerA = "";
+		Mission M;
+		ArrQueue<Mission> temp;
+
+		while (CompletedMissions.dequeue(M))
+		{
+			if (M.getTYP() == 'P')
+			{
+				temp.enqueue(M);
+				EmerA += ", ";
+				EmerA += to_string(M.getID());
+			}
+			else
+				temp.enqueue(M);
+
+		}
+		while (temp.dequeue(M))
+			CompletedMissions.enqueue(M);
+		return EmerA;
+	}
+
+	string CreateStringEmerInE()
+	{
+		string EmerA = "";
+		Mission M;
+		Rover R;
+		ArrQueue<Rover> tempR;
+		ArrQueue<Mission> temp;
+		//InExecution.dequeue(M);
+		//Busy_Rovers.dequeue(R);
+		//if (M.getID() != 0)
+		/*{
+			temp.enqueue(M);
+			tempR.enqueue(R);
+			if (M.getTYP() == 'E')
+			{
+				cout << "a" << M.getID() << endl;
+				EmerA += to_string(M.getID());
+				EmerA += "/";
+				EmerA += to_string(R.getID());
+			}
+		}*/
+			while (InExecution.dequeue(M) && Busy_Rovers.dequeue(R)) {
+
+				temp.enqueue(M);
+				tempR.enqueue(R);
+				if (M.getTYP() == 'E')
+				{
+					EmerA += ", ";
+					EmerA += to_string(M.getID());
+					EmerA += "/";
+					EmerA += to_string(R.getID());
+				}
+			}
+			while (temp.dequeue(M) && tempR.dequeue(R))
+			{
+				InExecution.enqueue(M);
+				Busy_Rovers.enqueue(R);
+			}
+		
+		return EmerA;
+
+	}
+
 	void Run()
 	{
 		//ui.ProgramMode();
@@ -246,10 +377,14 @@ public:
 		{
 			
 			SimulateDay();
-			string EmerA = CreateStringEmergW(EmergWaiting_Mission);
-			string PolA = CreateStringPolW(PolarWaiting_Mission);
+			string EmerA = CreateStringEmergW();
+			string PolA = CreateStringPolW();
+			string PolI = CreateStringPolInE();
+			string EmerI = CreateStringEmerInE();
+			string EmerC = CreateStringce();
+			string PolC = CreateStringcp();
 			//PrioQueue <Mission> EI = GetEmergInExecution();
-			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerA, PolA, InExecution.getCount(), InExecution, InExecution, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), CompletedMissions, CompletedMissions);
+			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerA, PolA, InExecution.getCount(), EmerI, PolI, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), EmerC, PolC);
 		}
 	}
 
@@ -288,16 +423,16 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
+		if (!Pol_Rover.isempty() && Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
-			M = PolarWaiting_Mission.dequeue();
+			PolarWaiting_Mission.dequeue(M);
 			Rover R;
 			Pol_Rover.dequeue(R);
-			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
+			Priority = day + (2 * (M.getTLOC() / R.getSpeed()) / 25) + M.getMDUR();
 			M.setKey(Priority);
 			InExecution.enqueue(M);
-			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
+			//Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
 			R.setKey(Priority);
 			Busy_Rovers.enqueue(R);
 		}
@@ -307,16 +442,18 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
+		if (!Emerg_Rover.isempty() && Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
 			EmergWaiting_Mission.dequeue(M);
 			Rover R;
 			Emerg_Rover.dequeue(R);
-			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
+			Priority = day + (2 * (M.getTLOC() / R.getSpeed())/25) + M.getMDUR();
+			//Priority = (M.getSIG() * (1 / M.getFD()) * (M.getMDUR() * M.getTLOC())) / 1000;
 			M.setKey(Priority);
 			InExecution.enqueue(M);
-			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
+			//Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
+			//Priority = (M.getSIG() * (1 / M.getFD()) * (M.getMDUR() * M.getTLOC()));
 			R.setKey(Priority);
 			Busy_Rovers.enqueue(R);
 		}
@@ -324,6 +461,26 @@ void MarsStation::Execute() {
 			check = false;
 		}
 	}
+}
+
+Mission GetMax(ArrQueue<Mission>& Q)
+{
+	Mission MaxMission;
+	Mission M;
+	ArrQueue<Mission> Temp;
+	int max = -99999999999;
+	while (Q.dequeue(M))
+	{
+		if (M.getKey() > max)
+		{
+			max = M.getKey();
+			MaxMission = M;
+		}
+		Temp.enqueue(M);
+	}
+	while (Temp.dequeue(M))
+		Q.enqueue(M);
+	return MaxMission;
 }
 
 void MarsStation::Complete() {
