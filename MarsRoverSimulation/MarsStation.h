@@ -108,25 +108,11 @@ public:
 
 	//Simulator function
 	void SimulateDay() {
-		Rover R;
-		ArrQueue<Rover> temp;
-		while (Pol_Rover.dequeue(R)) {
-			cout << R.getID();
-			temp.enqueue(R);
-		}
-		while (temp.dequeue(R))
-			Pol_Rover.enqueue(R);
 		Formulate();
 		Execute();
 		Complete();
 		CheckUp();
 		Maintenance();
-		while (Pol_Rover.dequeue(R)) {
-			cout << R.getID();
-			temp.enqueue(R);
-		}
-		while (temp.dequeue(R))
-			Pol_Rover.enqueue(R);
 		day++;
 	}
 
@@ -507,11 +493,17 @@ public:
 		}
 		return EmerA;
 	}
+	bool CheckForExit() {
+		bool check = true;
+		if (CompletedMissions.getCount() == EventSize && InCheckup_Emerg.isempty() && InCheckup_Pol.isempty() && InMaintenance.isempty())
+			check = false;
+		return check;
+	}
 	void Run()
 	{
 		ui.ProgramMode();
 		int Mode = ui.getProgMode();
-		for (int i = 0; i < 20; i++)
+		while(CheckForExit())
 		{
 			
 			SimulateDay();
@@ -537,9 +529,37 @@ public:
 						inp = _getch();
 				}
 			}
+			else
+				ui.Silent();
 		}
 	}
+	Mission GetMax(ArrQueue<Mission>& Q)
+	{
+		Mission MaxMission;
+		Mission M;
+		ArrQueue<Mission> Temp;
+		int max = -99999999999;
+		while (Q.dequeue(M))
+		{
+			if (M.getKey() > max)
+			{
+				max = M.getKey();
+				MaxMission = M;
+			}
+			Temp.enqueue(M);
+		}
+		while (Temp.dequeue(M))
+			Q.enqueue(M);
 
+		while (Q.dequeue(M))
+		{
+			if (M.getKey() != max)
+				Temp.enqueue(M);
+		}
+		while (Temp.dequeue(M))
+			Q.enqueue(M);
+		return MaxMission;
+	}
 
 };
 
@@ -557,7 +577,7 @@ void MarsStation::Formulate() {
 			}
 			else if(EventList.peek().getTYP() ==  'E'){
 				Mission M(EventList.peek().getED(), 'E', EventList.peek().getID(), EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
-				int Priority = M.getSIG();
+				int Priority = (2*M.getTLOC()+ M.getMDUR()) + M.getSIG();
 				M.setKey(Priority);
 				EmergWaiting_Mission.enqueue(M);
 				EventList.dequeue(); //dequeue from eventlist after formulation
@@ -596,12 +616,10 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (Emerg_Rover.peek().getID() == 0)
-			Emerg_Rover.dequeue();
 		if (!Emerg_Rover.isempty() && Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
-			int Priority;
 			Mission M;
-			EmergWaiting_Mission.dequeue(M);
+			M = GetMax(EmergWaiting_Mission);
+			int Priority;
 			Rover R;
 			Emerg_Rover.dequeue(R);
 			Priority = day + (2 * (M.getTLOC() / R.getSpeed())/25) + M.getMDUR();
@@ -636,6 +654,14 @@ Mission GetMax(ArrQueue<Mission>& Q)
 	}
 	while (Temp.dequeue(M))
 		Q.enqueue(M);
+
+	while (Q.dequeue(M))
+	{
+		if (M.getKey() != max)
+		Temp.enqueue(M);
+	}
+	while (Temp.dequeue(M))
+		Q.enqueue(M);
 	return MaxMission;
 }
 
@@ -645,7 +671,6 @@ void MarsStation::Complete() {
 	while (check) {
 		key = InExecution.peek().getKey();
 		if (key == day) {
-			int Priority; //Define Priority variable
 			Mission M;
 			InExecution.dequeue(M);
 			CompletedMissions.enqueue(M);

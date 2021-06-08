@@ -3,6 +3,7 @@
 #include <string>
 #include "string.h"
 #include <string.h>
+#include <stdlib.h>
 
 //#include "../MarsRoverSimulation/MarsStation.h"
 #include <fstream>
@@ -51,8 +52,13 @@ private:
 
 public:
 	void Read() {
+		cout << "Please enter the name of the file you would like to enter: ";
+		string filename;
+		cin >> filename;
+		cout << endl << flush;
+		system("CLS");
 		ifstream input;
-		input.open("InputFile.txt");
+		input.open(filename);
 		if (input.fail()) {
 			cerr << "Could not open file!" << endl;
 			exit(1);
@@ -266,70 +272,6 @@ public:
 
 
 
-	//-----------------------------  COUNTER FUNCTIONS  -----------------------------------------//
-	/*int count(ArrQueue<Rover>& Q)
-	{
-		Rover Item;
-		int count = 0;
-		ArrQueue<Rover> Temp;
-
-		while (Q.dequeue(Item))
-			count++;
-		return count;
-	}
-
-	int count(PrioQueue<Rover>& Q)
-	{
-		Rover Item;
-		int Key;
-		PrioQueue<Rover> Temp;
-
-		int count = 0;
-
-		while (Q.dequeue(Item, Key))
-		{
-			Temp.enqueue(Item, Key);
-			count++;
-		}
-		while (Temp.dequeue(Item, Key))
-		{
-			Q.enqueue(Item, Key);
-		}
-		return count;
-	}
-
-	int count(ArrQueue<Mission>& Q)
-	{
-		Mission Item;
-		int count = 0;
-
-		while (Q.dequeue(Item))
-			count++;
-		return count;
-	}
-
-	int count(PrioQueue<Mission>& Q)
-	{
-		Mission Item;
-		int Key;
-		int count = 0;
-		PrioQueue<Mission> Temp;
-
-		while (Q.dequeue(Item,Key))
-		{
-			Temp.enqueue(Item, Key);
-			count++;
-		}
-		while (Temp.dequeue(Item, Key))
-		{
-			Q.enqueue(Item, Key);
-		}
-		return count;
-	}*/
-	
-	//---------------------------------------------------------------------------------------------------------------//
-
-
 
 	void ProgramMode()   // ASKS USER FOR DESIRED SIM MODE
 	{
@@ -340,32 +282,6 @@ public:
 		cin >> ProgMode;
 	}
 
-
-	/*void OutputParameters()
-	{
-		NumberOfWaiting = PolarWaiting_MissionUI.getCount() + EmergWaiting_MissionUI.getCount();
-		NumberOfInExecution = InExecutionEmerg.getCount() + InExecutionPolar.getCount();
-		NumberOfAvailable = AvailableEmerg_Rover.getCount() + AvailablePol_Rover.getCount();
-		NumberOfInCheckup = InCheckup_Emerg.getCount() + InCheckup_Pol.getCount();
-		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
-
-	}*/
-
-	//void Interactive(int day, int waiting, PrioQueue<Mission> EmergW, ArrQueue<Mission> PolarW, int InExecution, PrioQueue<Mission> EmergI, PrioQueue<Mission> PolarI, int available, PrioQueue<Rover> EmergA, PrioQueue<Rover> PolarA, int InCheckup, ArrQueue<Rover> EmergIc, ArrQueue<Rover> PolarIc, int completed, ArrQueue<Mission> EmergC, ArrQueue<Mission> PolarC)   // RUNS INTERACTIVE
-	//{
-	//	OutputParameters();
-	//	cout << endl;
-	//	cout << "Current Day: " << day << endl;
-	//	cout << NumberOfWaiting << " Waiting Missions: " << "[";  printID(EmergWaiting_MissionUI); cout << "] " << "("; printID(PolarWaiting_MissionUI); cout << ") " << endl;
-	//	cout << "-------------------------------------------------------" << endl;
-	//	cout << NumberOfInExecution << " In-Execution Missions/Rovers: " << "["; printID(InExecutionEmerg); cout << "] " << "(";  printID(InExecutionPolar); cout << ") " << endl; // Incomplete
-	//	cout << "-------------------------------------------------------" << endl;
-	//	cout << NumberOfAvailable << " Available Rovers: " << "["; printID(AvailableEmerg_Rover); cout << "] " << "("; printID(AvailablePol_Rover); cout << ") " << endl;
-	//	cout << "-------------------------------------------------------" << endl;
-	//	cout << NumberOfInCheckup << " In-Checkup Rovers: " << "["; printID(InCheckup_Emerg); cout << "] " << "("; printID(InCheckup_Pol); cout << ") " << endl;
-	//	cout << "-------------------------------------------------------" << endl;
-	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
-	//}
 
 	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, string EmergI, string PolarI, int available, string EmergA, string PolarA, int InCheckup, string EmergIc, string PolarIc, int InMaintenance, string EmergIM, string PolarIM, int completed, string EmergC, string & PolarC)   // RUNS INTERACTIVE
 	{
