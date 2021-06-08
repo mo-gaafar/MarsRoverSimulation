@@ -367,7 +367,7 @@ public:
 	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	//}
 
-	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, string EmergI, string PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, string EmergC, string & PolarC)   // RUNS INTERACTIVE
+	void Interactive(int Day, int waiting, string EmergW, string PolarW, int InExecution, string EmergI, string PolarI, int available, string EmergA, string PolarA, int InCheckup, string EmergIc, string PolarIc, int InMaintenance, string EmergIM, string PolarIM, int completed, string EmergC, string & PolarC)   // RUNS INTERACTIVE
 	{
 		//OutputParameters();
 		cout << endl;
@@ -376,9 +376,11 @@ public:
 		cout << "-------------------------------------------------------" << endl;
 		cout << InExecution << " In-Execution Missions/Rovers: " << "[" << EmergI << "] " << "(" << PolarI << ") " << endl; // Incomplete
 		cout << "-------------------------------------------------------" << endl;
-		cout << available << " Available Rovers: " << "["; printID(EmergA); cout << "] " << "("; printID(PolarA); cout << ") " << endl;
+		cout << available << " Available Rovers: " << "[" << EmergA << "] " << "(" << PolarA << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
-		cout << InCheckup << " In-Checkup Rovers: " << "["; printID(EmergIc); cout << "] " << "("; printID(PolarIc); cout << ") " << endl;
+		cout << InCheckup << " In-Checkup Rovers: " << "[" << EmergIc << "] " << "(" << PolarIc << ") " << endl;
+		cout << "-------------------------------------------------------" << endl;
+		cout << InMaintenance << " In-Maintenance Rovers: " << "[" << EmergIM << "] " << "(" << PolarIM << ") " << endl;
 		cout << "-------------------------------------------------------" << endl;
 		cout << completed << " Completed Missions: " << "[" << EmergC << "] " << "(" << PolarC << ") " << endl;
 	}

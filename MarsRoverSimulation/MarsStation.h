@@ -8,9 +8,8 @@
 #include"Event.h"
 #include "UI.h"
 #include <string>
-#include "string.h"
-#include <string.h>
-
+#include<Windows.h>
+#include<conio.h>
 
 using namespace std;
 
@@ -66,35 +65,6 @@ private:
 
 
 public:
-
-	//MarsStation() {
-	//	day = 0;
-	//	
-	//	//---------------------Initialization Stage---------------------//
-	//	UI UserInterface; // interface object which reads from input file on construction
-
-	//	this->EmergRovNum = UserInterface.getEmRoverCount();
-	//	this->PolarRovNum = UserInterface.getPolarRoverCount();
-	//	this->NMissionsToCheckup = UserInterface.getCheckCount();
-	//	this->EventSize = UserInterface.getNumberOFEvents();
-
-	//	//initializing F_Arr (useless event type array)
-	//	char* F_Arr = new char[EventSize];
-	//	for (int i = 0; i < EventSize; i++)
-	//	{
-	//		F_Arr[i] = 'F';//formulation event type
-	//	}
-
-	//	Initialize(F_Arr, UserInterface.getMissionType(), UserInterface.getEventDay(), UserInterface.getID(), UserInterface.getLocation(), 
-	//		UserInterface.getDuration(), UserInterface.getSignifiance(), UserInterface.getPolarCheck(), UserInterface.getPolarSpeed(),
-	//		UserInterface.getEmCheck(), UserInterface.getEmSpeed(), UserInterface.getCheckCount());
-
-	//	//---------------------Run Simulation---------------------//
-	//	UserInterface.ProgramMode();
-
-
-	//}
-
 	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
 		int CheckupDurPol, int SpeedPol, int CheckupDurEmerg, int SpeedEmerg, int NMissionsToCheckup, int EmergRovNum, int PolarRovNum) {
 		day = 0;
@@ -135,26 +105,28 @@ public:
 			Pol_Rover.enqueue(R);
 		}
 	}
-	//Setters and getters
-	
-	
-	//
 
+	//Simulator function
 	void SimulateDay() {
+		Rover R;
+		ArrQueue<Rover> temp;
+		while (Pol_Rover.dequeue(R)) {
+			cout << R.getID();
+			temp.enqueue(R);
+		}
+		while (temp.dequeue(R))
+			Pol_Rover.enqueue(R);
 		Formulate();
 		Execute();
 		Complete();
 		CheckUp();
 		Maintenance();
-		Rover R;
-		ArrQueue<Rover> Temp;
-		while (Emerg_Rover.dequeue(R))
-		{
-			//cout << R.getSpeed() << endl;
-			Temp.enqueue(R);
+		while (Pol_Rover.dequeue(R)) {
+			cout << R.getID();
+			temp.enqueue(R);
 		}
-		while (Temp.dequeue(R))
-			Emerg_Rover.enqueue(R);
+		while (temp.dequeue(R))
+			Pol_Rover.enqueue(R);
 		day++;
 	}
 
@@ -184,16 +156,8 @@ public:
 	int GetEmergRovNum();
 
 
+	//String functions
 
-	/*void OutputParameters()
-	{
-		NumberOfWaiting = PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount();
-		NumberOfInExecution = GetIn.getCount() + InExecutionPolar.getCount();
-		NumberOfAvailable = AvailableEmerg_Rover.getCount() + AvailablePol_Rover.getCount();
-		NumberOfInCheckup = InCheckup_Emerg.getCount() + InCheckup_Pol.getCount();
-		NumberOfCompleted = CompletedEmerg.getCount() + CompletedPolar.getCount();
-
-	}*/
 	string CreateStringEmergW() {
 		string EmerA = "";
 		Mission R;
@@ -212,6 +176,10 @@ public:
 			}
 			while (temp.dequeue(R))
 				EmergWaiting_Mission.enqueue(R);
+		}
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
 		}
 		return EmerA;
 	}
@@ -235,6 +203,10 @@ public:
 			while (temp.dequeue(R))
 				PolarWaiting_Mission.enqueue(R);
 		}
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
 		return EmerA;
 
 	}
@@ -246,19 +218,19 @@ public:
 		Rover R;
 		ArrQueue<Rover> tempR;
 		ArrQueue<Mission> temp;
-		//InExecution.dequeue(M);
-		//Busy_Rovers.dequeue(R);
-		//if (M.getID() != 0)
+		InExecution.dequeue(M);
+		Busy_Rovers.dequeue(R);
+		if (M.getID() != 0)
 		{
-			//temp.enqueue(M);
-			//tempR.enqueue(R);
-			//if (M.getTYP() == 'P')
-			//{
-			//	//cout << "k" << M.getID() << endl;
-			//	EmerA += to_string(M.getID());
-			//	EmerA += "/";
-			//	EmerA += to_string(R.getID());
-			//}
+			temp.enqueue(M);
+			tempR.enqueue(R);
+			if (M.getTYP() == 'P')
+			{
+				//cout << "k" << M.getID() << endl;
+				EmerA += to_string(M.getID());
+				EmerA += "/";
+				EmerA += to_string(R.getID());
+			}
 			while (InExecution.dequeue(M) && Busy_Rovers.dequeue(R)) {
 
 				temp.enqueue(M);
@@ -276,6 +248,56 @@ public:
 				InExecution.enqueue(M);
 				Busy_Rovers.enqueue(R);
 			}
+		}
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+
+	}
+
+	string CreateStringEmergInE()
+	{
+		string EmerA = "";
+		Mission M;
+		Rover R;
+		ArrQueue<Rover> tempR;
+		ArrQueue<Mission> temp;
+		InExecution.dequeue(M);
+		Busy_Rovers.dequeue(R);
+		if (M.getID() != 0)
+		{
+			temp.enqueue(M);
+			tempR.enqueue(R);
+			if (M.getTYP() == 'E')
+			{
+				//cout << "k" << M.getID() << endl;
+				EmerA += to_string(M.getID());
+				EmerA += "/";
+				EmerA += to_string(R.getID());
+			}
+			while (InExecution.dequeue(M) && Busy_Rovers.dequeue(R)) {
+
+				temp.enqueue(M);
+				tempR.enqueue(R);
+				if (M.getTYP() != 'P')
+				{
+					EmerA += ", ";
+					EmerA += to_string(M.getID());
+					EmerA += "/";
+					EmerA += to_string(R.getID());
+				}
+			}
+			while (temp.dequeue(M) && tempR.dequeue(R))
+			{
+				InExecution.enqueue(M);
+				Busy_Rovers.enqueue(R);
+			}
+		}
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
 		}
 		return EmerA;
 
@@ -301,6 +323,11 @@ public:
 		}
 		while (temp.dequeue(M))
 			CompletedMissions.enqueue(M);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
 		return EmerA;
 	}
 
@@ -322,69 +349,194 @@ public:
 				temp.enqueue(M);
 
 		}
+
 		while (temp.dequeue(M))
 			CompletedMissions.enqueue(M);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
 		return EmerA;
 	}
 
-	string CreateStringEmerInE()
+	string CreateStringPA()
 	{
 		string EmerA = "";
-		Mission M;
 		Rover R;
-		ArrQueue<Rover> tempR;
-		ArrQueue<Mission> temp;
-		//InExecution.dequeue(M);
-		//Busy_Rovers.dequeue(R);
-		//if (M.getID() != 0)
-		/*{
-			temp.enqueue(M);
-			tempR.enqueue(R);
-			if (M.getTYP() == 'E')
-			{
-				cout << "a" << M.getID() << endl;
-				EmerA += to_string(M.getID());
-				EmerA += "/";
-				EmerA += to_string(R.getID());
-			}
-		}*/
-			while (InExecution.dequeue(M) && Busy_Rovers.dequeue(R)) {
+		ArrQueue<Rover> temp;
 
-				temp.enqueue(M);
-				tempR.enqueue(R);
-				if (M.getTYP() == 'E')
-				{
-					EmerA += ", ";
-					EmerA += to_string(M.getID());
-					EmerA += "/";
-					EmerA += to_string(R.getID());
-				}
-			}
-			while (temp.dequeue(M) && tempR.dequeue(R))
-			{
-				InExecution.enqueue(M);
-				Busy_Rovers.enqueue(R);
-			}
-		
+		while (Pol_Rover.dequeue(R))
+		{
+			temp.enqueue(R);
+			EmerA += ", ";
+			EmerA += to_string(R.getID());
+		}
+
+		while (temp.dequeue(R))
+			Pol_Rover.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+
 		return EmerA;
-
 	}
 
+	string CreateStringEA()
+	{
+		string EmerA = "";
+		Rover R;
+		ArrQueue<Rover> temp;
+
+		while (Emerg_Rover.dequeue(R))
+		{
+			temp.enqueue(R);
+			EmerA += ", ";
+			EmerA += to_string(R.getID());
+		}
+		while (temp.dequeue(R))
+			Emerg_Rover.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+	}
+
+	string CreateStringEIC()
+	{
+		string EmerA = "";
+		Rover R;
+		ArrQueue<Rover> temp;
+
+		while (InCheckup_Emerg.dequeue(R))
+		{
+			temp.enqueue(R);
+			EmerA += ", ";
+			EmerA += to_string(R.getID());
+		}
+		while (temp.dequeue(R))
+			InCheckup_Emerg.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+	}
+
+	string CreateStringPIC()
+	{
+		string EmerA = "";
+		Rover R;
+		ArrQueue<Rover> temp;
+
+		while (InCheckup_Pol.dequeue(R))
+		{
+			temp.enqueue(R);
+			EmerA += ", ";
+			EmerA += to_string(R.getID());
+		}
+		while (temp.dequeue(R))
+			InCheckup_Pol.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+	}
+
+	string CreateStringEIM()
+	{
+		string EmerA = "";
+		Rover R;
+		ArrQueue<Rover> temp;
+
+		while (InMaintenance.dequeue(R))
+		{
+			if (R.getTYP() == 'E')
+			{
+				temp.enqueue(R);
+				EmerA += ", ";
+				EmerA += to_string(R.getID());
+			}
+			else
+				temp.enqueue(R);
+
+		}
+
+		while (temp.dequeue(R))
+			InMaintenance.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+	}
+
+	string CreateStringPIM()
+	{
+		string EmerA = "";
+		Rover R;
+		ArrQueue<Rover> temp;
+
+		while (InMaintenance.dequeue(R))
+		{
+			if (R.getTYP() == 'P')
+			{
+				temp.enqueue(R);
+				EmerA += ", ";
+				EmerA += to_string(R.getID());
+			}
+			else
+				temp.enqueue(R);
+
+		}
+
+		while (temp.dequeue(R))
+			InMaintenance.enqueue(R);
+
+		if (EmerA[0] == ',') {
+			EmerA.erase(EmerA.begin());
+			EmerA.erase(EmerA.begin());
+		}
+		return EmerA;
+	}
 	void Run()
 	{
-		//ui.ProgramMode();
+		ui.ProgramMode();
+		int Mode = ui.getProgMode();
 		for (int i = 0; i < 20; i++)
 		{
 			
 			SimulateDay();
-			string EmerA = CreateStringEmergW();
-			string PolA = CreateStringPolW();
-			string PolI = CreateStringPolInE();
-			string EmerI = CreateStringEmerInE();
-			string EmerC = CreateStringce();
-			string PolC = CreateStringcp();
-			//PrioQueue <Mission> EI = GetEmergInExecution();
-			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerA, PolA, InExecution.getCount(), EmerI, PolI, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), EmerC, PolC);
+			if (Mode != 3) {
+				string EmerW = CreateStringEmergW();
+				string PolW = CreateStringPolW();
+				string PolI = CreateStringPolInE();
+				string EmerI = CreateStringEmergInE();
+				string EmerC = CreateStringce();
+				string PolC = CreateStringcp();
+				string EmerA = CreateStringEA();
+				string PolA = CreateStringPA();
+				string EmerIC = CreateStringEIC();
+				string PolIC = CreateStringPIC();
+				string EmerIM = CreateStringEIM();
+				string PolIM = CreateStringPIM();
+				ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmerW, PolW, InExecution.getCount(), EmerI, PolI, Pol_Rover.getCount() + Emerg_Rover.getCount(), EmerA, PolA, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), EmerIC, PolIC, InMaintenance.getCount(), EmerIM, PolIM, CompletedMissions.getCount(), EmerC, PolC);
+				if (Mode == 2)
+					Sleep(1000);
+				else {
+					char inp = _getch();
+					while (inp != 32)
+						inp = _getch();
+				}
+			}
 		}
 	}
 
@@ -423,6 +575,8 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
+		if (Pol_Rover.peek().getID() == 0)
+			Pol_Rover.dequeue();
 		if (!Pol_Rover.isempty() && Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
@@ -442,6 +596,8 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
+		if (Emerg_Rover.peek().getID() == 0)
+			Emerg_Rover.dequeue();
 		if (!Emerg_Rover.isempty() && Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
