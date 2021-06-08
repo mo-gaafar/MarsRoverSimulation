@@ -106,18 +106,6 @@ public:
 		//ArrQueue<Event> EventList(EventSize);
 		Initialize(F_Arr, TYP_Arr, ED_Arr, ID_Arr, TLOC_Arr, MDUR_Arr, SIG_Arr, CheckupDurPol, SpeedPol,
 			CheckupDurEmerg, SpeedEmerg,  NMissionsToCheckup);
-		Rover R;
-		ArrQueue<Rover> Temp;
-		int idp = 0;
-		int ide = 0;
-		while (Pol_Rover.dequeue(R))
-		{
-			R.setID(idp + 1);
-			idp++;
-			Temp.enqueue(R);
-		}
-		while (Temp.dequeue(R))
-			Pol_Rover.enqueue(R);
 	}
 	
 	//Getting EventList and Rover Queues Ready
@@ -132,15 +120,18 @@ public:
 			Event E(F_Arr[i], TYP_Arr[i], ED_Arr[i], ID_Arr[i], TLOC_Arr[i], MDUR_Arr[i], SIG_Arr[i]);
 			EventList.enqueue(E);
 		}
+		int idr = 1;
 		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
-			Rover R(i+1, 'E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
+			Rover R(idr, 'E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
+			idr++;
 			//Emerg_Rover.dequeue(R);
 			Emerg_Rover.enqueue(R);
 		}
 		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {
-			Rover R(i+1, 'P', CheckupDurPol, SpeedPol, NMissionsToCheckup);
+			Rover R(idr, 'P', CheckupDurPol, SpeedPol, NMissionsToCheckup);
+			idr++;
 			Pol_Rover.enqueue(R);
 		}
 	}
