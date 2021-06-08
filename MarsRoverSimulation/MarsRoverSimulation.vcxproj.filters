@@ -13,7 +13,6 @@
     <ClInclude Include="MarsStation.h" />
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="ArrQueue.h" />
-    <ClInclude Include="PrioQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

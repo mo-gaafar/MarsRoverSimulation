@@ -1,4 +1,6 @@
 #pragma once
+#include<iostream>
+using namespace std;
 class Rover {
 private:
 	char roverType;
@@ -9,6 +11,7 @@ private:
 	int inMaintenanceDay;
 	int missionNo;
 	int ID;
+	int key;
 
 	
 
@@ -23,6 +26,7 @@ public:
 		missionNo = 0;
 		inMaintenanceDay = 0;
 		ID = id;
+		key = 0;
 	}
 	//Copy constructor
 	Rover(Rover const & r) {
@@ -33,6 +37,8 @@ public:
 		inCheckDays = r.getInCheckDays();
 		missionNo = r.getMissionNO();
 		inMaintenanceDay = r.getinMaintenanceDay();
+		key = r.key;
+		ID = r.ID;
 	}
 	//Default constructor
 	Rover() {
@@ -43,10 +49,13 @@ public:
 		missionNo = 0;
 		inCheckDays = -1;
 		inMaintenanceDay = -1;
+		key = 0;
+		ID = 0;
 	}
 
 	Rover & operator = (const Rover & r) {
 		
+		ID = r.ID;
 		roverType = r.roverType;
 		checkupDur = r.checkupDur;
 		checkupMissionNo = r.checkupMissionNo;
@@ -54,6 +63,7 @@ public:
 		inCheckDays = r.inCheckDays;
 		missionNo = r.missionNo;
 		inMaintenanceDay = r.inMaintenanceDay;
+		key = r.key;
 		return *this;
 	}
 
@@ -69,6 +79,17 @@ public:
 	void setinMaintenanceDay(int in) { inMaintenanceDay = in; }
 	void incrementMissions() { missionNo++; }
 	int getID() { return ID; }
+
+	void setKey(int k) {
+		key = k;
+	}
+	int getKey() {
+		return key;
+	}
+
+	void Print() {
+		cout << ID << endl;
+	}
 
 	void setCheckupMissionNo(int in) { checkupMissionNo = in; }
 	void setID(int id) { ID = id; }

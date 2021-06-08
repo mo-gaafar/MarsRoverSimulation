@@ -1,5 +1,6 @@
 #include<iostream>
 //#include"MarsStation.h"
+#include <Windows.h>
 #include "PrioQueue.h"
 #include "MarsStation.h"
 #include "ArrayList.h"
@@ -29,37 +30,8 @@ int main() {
 		UserInterface.getPolarCheck(), UserInterface.getPolarSpeed(), UserInterface.getEmCheck(),UserInterface.getEmSpeed(), NMissionsToCheckup,
 		EmergRovNum, PolarRovNum);
 	
-	//---------------------Run Simulation---------------------//
-	int ProgMode = UserInterface.getProgMode();
 	
-	if (ProgMode!= 3)
-	for (int i = 0; i < 4; i++) //change limit later
-	{
-		TestStation.SimulateDay();
-		UserInterface.Refresh(TestStation);
-		if (ProgMode == 1)
-		{
-			UserInterface.Interactive();
-			system("pause");
-		}
-		else if (ProgMode == 2)
-		{
-			UserInterface.Interactive();
-		}
-	}
-
-	if (ProgMode == 3)
-	{
-		//need set limit later
-		for (int i = 0; i < 4; i++)
-		{
-			TestStation.SimulateDay();
-		}
-		//missing simulation 
-		UserInterface.Silent();
-	}
-
-	UserInterface.OutputFile();
+	TestStation.Run();
 
 	
 	

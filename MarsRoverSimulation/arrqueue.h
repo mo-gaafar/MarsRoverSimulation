@@ -10,6 +10,7 @@ private:
 	int front;
 	int rear;
 	int arrsize;
+	int key;
 public:
 	//Copy Constructor
 	ArrQueue( ArrQueue<T> & Copy) 
@@ -32,12 +33,14 @@ public:
 		items = new T[arrsize];
 		front = -1;
 		rear = -1;
+		key = 0;
 	}
 	ArrQueue() {
 		arrsize= 100;
 		items = new T[arrsize];
 		front = -1;
 		rear = -1;
+		key = 0;
 	}
 
 	ArrQueue<T>& operator = (ArrQueue<T>& q) {
@@ -134,6 +137,23 @@ public:
 		{
 			return items[front];
 		}
+	}
+
+	bool checkKey(int check, T& OItem) {
+		ArrQueue<T> temp;
+		T item;
+		bool out = false;
+		while (dequeue(item)) {
+			temp.enqueue(item);
+			if (item.getKey() == check) {
+				OItem = item;
+				out = true;
+				break;
+			}
+		}
+		while (temp.dequeue(item))
+			enqueue(item);
+		return out;
 	}
 
 };
