@@ -666,13 +666,12 @@ Mission GetMax(ArrQueue<Mission>& Q)
 }
 
 void MarsStation::Complete() {
-	bool check = true;
 	int key;
-	while (check) {
-		key = InExecution.peek().getKey();
+	Mission M;
+	ArrQueue<Mission> temp;
+	while (InExecution.dequeue(M)) {
+		key = M.getKey();
 		if (key == day) {
-			Mission M;
-			InExecution.dequeue(M);
 			CompletedMissions.enqueue(M);
 			Rover R;
 			Busy_Rovers.dequeue(R);
@@ -693,8 +692,10 @@ void MarsStation::Complete() {
 			}
 		}
 		else
-			check = false; //bug fix needs review
+			temp.enqueue(M);
 	}
+	while (temp.dequeue(M))
+		InExecution.enqueue(M);
 }
 
 bool MarsStation::CheckUpCheck(Rover &r) {
