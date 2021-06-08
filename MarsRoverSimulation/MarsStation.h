@@ -288,7 +288,7 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
+		if (!Pol_Rover.isempty() && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
 			M = PolarWaiting_Mission.dequeue();
@@ -307,7 +307,7 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
+		if (!!Emerg_Rover.isempty() > 0 && !EmergWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
 			EmergWaiting_Mission.dequeue(M);
