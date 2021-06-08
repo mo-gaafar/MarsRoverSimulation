@@ -159,7 +159,7 @@ public:
 		ArrQueue<Rover> Temp;
 		while (Emerg_Rover.dequeue(R))
 		{
-			cout << R.getID() << endl;
+			cout << R.getSpeed() << endl;
 			Temp.enqueue(R);
 		}
 		while (Temp.dequeue(R))
@@ -275,7 +275,6 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		cout << Pol_Rover.peek().getID() << endl;
 		if (Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;

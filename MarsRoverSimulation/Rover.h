@@ -38,6 +38,7 @@ public:
 		missionNo = r.getMissionNO();
 		inMaintenanceDay = r.getinMaintenanceDay();
 		key = r.key;
+		ID = r.ID;
 	}
 	//Default constructor
 	Rover() {
@@ -54,6 +55,7 @@ public:
 
 	Rover & operator = (const Rover & r) {
 		
+		ID = r.ID;
 		roverType = r.roverType;
 		checkupDur = r.checkupDur;
 		checkupMissionNo = r.checkupMissionNo;
