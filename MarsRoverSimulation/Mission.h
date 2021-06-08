@@ -9,11 +9,10 @@ private:
 	int missionDur;
 	int sig;
 	int ID;
+	int key;
 
 	//not yet implemented in simulation'
 	int completionDay; //to be able to calculate waiting time
-	//int missionED; //execution day
-	Rover* RoverPtr; //to get speed and rover ID
 
 
 public:
@@ -26,6 +25,7 @@ public:
 		sig = m.getSIG();
 		ID = m.getID();
 		completionDay = m.getCompletionDay();
+		key = m.key;
 	}
 	 Mission() {
 		formulationDay = 0;
@@ -35,6 +35,7 @@ public:
 		sig = 0;
 		ID = 0;
 		completionDay = -1;
+		key = 0;
 	}
 
 	Mission& operator = (const Mission & m) {
@@ -46,7 +47,6 @@ public:
 		sig = m.sig;
 		ID = m.ID;
 		completionDay = m.completionDay;
-		RoverPtr = m.RoverPtr;
 		return *this;
 	}
 
@@ -58,16 +58,20 @@ public:
 	int getSIG() const { return sig; }
 	int getID() const { return ID; }
 	int getCompletionDay() const { return completionDay; }
-	Rover* getRoverPtr() const { return RoverPtr; }
-	int getRoverSpeed() const { return RoverPtr->getSpeed(); }
-	int getRoverID() const { return RoverPtr->getID(); }
 
 	//SETTERS
 	void setTYP(char in) { missionType = in; } //In case of promotion
 	void setID(int id) { ID = id; } 
 	void setCompletionDay(int in) { completionDay = in; } //dont forget to set in sim
-	void setRoverPtr(Rover* in) { RoverPtr = in; }
 	
+	//Key Fncs
+	void setKey(int k) {
+		key = k;
+	}
+	int getKey() {
+		return key;
+	}
+
 	//overloading comparative operator
 	bool operator <= (Mission const& obj)
 	{
@@ -88,4 +92,6 @@ Mission::Mission(int f, char mt, int id, int tl, int md, int s) {
 	missionDur = md;
 	sig = s;
 	ID = id;
+	completionDay = 0;
+	key = 0;
 }

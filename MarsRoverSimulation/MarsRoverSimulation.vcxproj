@@ -143,7 +143,6 @@
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="ArrQueue.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="PrioQueue.h" />
     <ClInclude Include="LinkedStack.h" />
     <ClInclude Include="MarsStation.h" />
     <ClInclude Include="Mission.h" />

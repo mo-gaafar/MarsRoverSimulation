@@ -3,7 +3,6 @@
 #include"ArrQueue.h"
 #include"LinkedList.h"
 #include"LinkedStack.h"
-#include"PrioQueue.h"
 #include"Rover.h"
 #include"Mission.h"
 #include"Event.h"
@@ -18,6 +17,7 @@ private:
 	int EventSize;
 	int EmergRovNum;
 	int PolarRovNum;
+	ArrQueue<Event> temp;
 
 
 	//Main Data Structures
@@ -31,11 +31,11 @@ private:
 	//---------Rovers----------//
 	
 	//Available Rovers
-	PrioQueue<Rover> Pol_Rover;
-	PrioQueue<Rover> Emerg_Rover;
+	ArrQueue<Rover> Pol_Rover;
+	ArrQueue<Rover> Emerg_Rover;
 
 	//Busy Rovers
-	PrioQueue<Rover> Busy_Rovers;
+	ArrQueue<Rover> Busy_Rovers;
 	
 	//InCheckup
 	ArrQueue<Rover> InCheckup_Emerg;
@@ -43,20 +43,20 @@ private:
 
 
 	//InMaintenance
-	PrioQueue<Rover> InMaintenance;
+	ArrQueue<Rover> InMaintenance;
 
 	//____________________________//
 	//----------Missions----------//
 	
 	//Waiting Missions
 	ArrQueue<Mission> PolarWaiting_Mission;
-	PrioQueue<Mission> EmergWaiting_Mission;
+	ArrQueue<Mission> EmergWaiting_Mission;
 	//Completed Missions
 
 	ArrQueue<Mission> CompletedMissions;
 
 	//In Execution Missions
-	PrioQueue<Mission> InExecution;
+	ArrQueue<Mission> InExecution;
 
 	UI ui;
 	
@@ -120,14 +120,14 @@ public:
 		}
 		//Initializing Emerg Rover Queue
 		for (int i = 0; i < EmergRovNum; i++) {
-			Rover R(i, 'E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
+			Rover R(i+1, 'E', CheckupDurEmerg, SpeedEmerg, NMissionsToCheckup);
 			//Emerg_Rover.dequeue(R);
-			Emerg_Rover.enqueue(R, SpeedEmerg); //------------------------------------------------------------------------------------------------> review this
+			Emerg_Rover.enqueue(R);
 		}
 		//Initializing Polar Rover Queue
 		for (int i = 0; i < PolarRovNum; i++) {
-			Rover R(i, 'P', CheckupDurPol, SpeedPol,NMissionsToCheckup);
-			Pol_Rover.enqueue(R, SpeedPol);
+			Rover R(i+1, 'P', CheckupDurPol, SpeedPol, NMissionsToCheckup);
+			Pol_Rover.enqueue(R);
 		}
 	}
 	//Setters and getters
@@ -157,12 +157,12 @@ public:
 	//   GETTERS FOR UI   //
 	int GetDay();
 	void GetPolarWaiting_Mission(ArrQueue<Mission>& m);
-	PrioQueue<Mission> GetEmergWaiting_Mission();
-	void GetBusy_Rovers(PrioQueue<Rover>& Emerg, PrioQueue<Rover>& Polar);
-	PrioQueue<Mission> GetEmergInExecution();
-	PrioQueue<Mission> GetPolarInExecution();
-	PrioQueue<Rover> GetAvailablePol_Rover();
-	PrioQueue<Rover> GetAvailableEmerg_Rover();
+	ArrQueue<Mission> GetEmergWaiting_Mission();
+	void GetBusy_Rovers(ArrQueue<Rover>& Emerg, ArrQueue<Rover>& Polar);
+	ArrQueue<Mission> GetEmergInExecution();
+	ArrQueue<Mission> GetPolarInExecution();
+	ArrQueue<Rover> GetAvailablePol_Rover();
+	ArrQueue<Rover> GetAvailableEmerg_Rover();
 	void GetInCheckup_Emerg(ArrQueue<Rover> &r);
 	void GetInCheckup_Pol(ArrQueue<Rover> &r);
 	void GetCompletedMissions(ArrQueue<Mission>& Emerg, ArrQueue<Mission>& Polar);
@@ -187,6 +187,30 @@ public:
 		for (int i = 0; i < 20; i++)
 		{
 			SimulateDay();
+			/*string EmerA = "l";
+			string PolA = "l";
+			Rover R;
+			ArrQueue<Rover> temp;
+			Emerg_Rover.dequeue(R);
+			temp.enqueue(R);
+			EmerA += R.getID();
+			while (Emerg_Rover.dequeue(R)) {
+				temp.enqueue(R);
+				EmerA += ", ";
+				EmerA += R.getID();
+			}
+			while (temp.dequeue(R))
+				Emerg_Rover.enqueue(R);
+			Pol_Rover.dequeue(R);
+			temp.enqueue(R);
+			PolA += R.getID();
+			while (Pol_Rover.dequeue(R)) {
+				temp.enqueue(R);
+				PolA += ", ";
+				PolA += R.getID();
+			}
+			while (temp.dequeue(R))
+				Pol_Rover.enqueue(R);*/
 			//PrioQueue <Mission> EI = GetEmergInExecution();
 			ui.Interactive(day, PolarWaiting_Mission.getCount() + EmergWaiting_Mission.getCount(), EmergWaiting_Mission, PolarWaiting_Mission, InExecution.getCount(), InExecution, InExecution, Pol_Rover.getCount() + Emerg_Rover.getCount(), Emerg_Rover, Pol_Rover, InCheckup_Emerg.getCount() + InCheckup_Pol.getCount(), InCheckup_Emerg, InCheckup_Pol, CompletedMissions.getCount(), CompletedMissions, CompletedMissions);
 		}
@@ -210,7 +234,8 @@ void MarsStation::Formulate() {
 			else if(EventList.peek().getTYP() ==  'E'){
 				Mission M(EventList.peek().getED(), 'E', EventList.peek().getID(), EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
 				int Priority = M.getSIG();
-				EmergWaiting_Mission.enqueue(M, Priority);
+				M.setKey(Priority);
+				EmergWaiting_Mission.enqueue(M);
 				EventList.dequeue(); //dequeue from eventlist after formulation
 			}
 		}
@@ -226,16 +251,18 @@ void MarsStation::Execute() {
 	int key;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (!Pol_Rover.isEmpty() && !PolarWaiting_Mission.isempty()) {
+		if (Pol_Rover.peek().getID() > 0 && !PolarWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
 			M = PolarWaiting_Mission.dequeue();
 			Rover R;
-			R = Pol_Rover.dequeue(key);
+			Pol_Rover.dequeue(R);
 			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
-			InExecution.enqueue(M, Priority);
+			M.setKey(Priority);
+			InExecution.enqueue(M);
 			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
-			Busy_Rovers.enqueue(R, Priority);
+			R.setKey(Priority);
+			Busy_Rovers.enqueue(R);
 		}
 		else
 			check = false;
@@ -243,16 +270,18 @@ void MarsStation::Execute() {
 	check = true;
 	while (check) {
 		//Checking if theres any available rover & if theres a mission waiting for it
-		if (!Emerg_Rover.isEmpty() && !EmergWaiting_Mission.isEmpty()) {
+		if (Emerg_Rover.peek().getID() > 0 && !EmergWaiting_Mission.isempty()) {
 			int Priority;
 			Mission M;
-			M = EmergWaiting_Mission.dequeue(key);
+			EmergWaiting_Mission.dequeue(M);
 			Rover R;
-			R = Emerg_Rover.dequeue(key);
+			Emerg_Rover.dequeue(R);
 			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
-			InExecution.enqueue(M, Priority);
+			M.setKey(Priority);
+			InExecution.enqueue(M);
 			Priority = day + 2 * (M.getTLOC() / R.getSpeed()) + M.getMDUR();
-			Busy_Rovers.enqueue(R, Priority);
+			R.setKey(Priority);
+			Busy_Rovers.enqueue(R);
 		}
 		else {
 			check = false;
@@ -264,28 +293,26 @@ void MarsStation::Complete() {
 	bool check = true;
 	int key;
 	while (check) {
-		InExecution.peek(key);
+		key = InExecution.peek().getKey();
 		if (key == day) {
 			int Priority; //Define Priority variable
 			Mission M;
-			M = InExecution.dequeue(key);
+			InExecution.dequeue(M);
 			CompletedMissions.enqueue(M);
 			Rover R;
-			R = Busy_Rovers.dequeue(key);
+			Busy_Rovers.dequeue(R);
 			bool check2 = CheckUpCheck(R);
 			if (check2) {
 				R.incrementMissions();
 				char type = R.getTYP();
 				if (type == 'P')
 				{
-					Priority = R.getSpeed();
-					Pol_Rover.enqueue(R, Priority);
+					Pol_Rover.enqueue(R);
 				}
 				else {
 					if (type == 'E')
 					{
-						Priority = R.getSpeed();//Calculate Priority
-						Emerg_Rover.enqueue(R, Priority);
+						Emerg_Rover.enqueue(R);
 					}
 				}
 			}
@@ -301,12 +328,12 @@ bool MarsStation::CheckUpCheck(Rover &r) {
 		char type = r.getTYP();
 		if (type == 'P') {
 			CheckDays = day + r.getCDUR();
-			r.setInCheckDays(CheckDays);
+			r.setKey(CheckDays);
 			InCheckup_Pol.enqueue(r);
 		}
 		else if (type == 'E') {
 			CheckDays = day + r.getCDUR();
-			r.setInCheckDays(CheckDays);
+			r.setKey(CheckDays);
 			InCheckup_Emerg.enqueue(r);
 		}
 		return false;
@@ -315,30 +342,22 @@ bool MarsStation::CheckUpCheck(Rover &r) {
 }
 
 void MarsStation::CheckUp() {
-	bool check = true;
-	while (check) {
-		int Priority;
-		if (InCheckup_Pol.peek().getInCheckDays() == day) {
-			Rover R;
-			R = InCheckup_Pol.dequeue();
-			MaintenanceCheck(R);
-			R.setInCheckDays(-1);
-			Priority = R.getSpeed();
-			Pol_Rover.enqueue(R, Priority);
+	Rover R1;
+	while (InCheckup_Pol.checkKey(day, R1)) {
+		InCheckup_Pol.dequeue(R1);
+		bool check2 = MaintenanceCheck(R1);
+		if (check2) {
+			R1.setInCheckDays(-1);
+			Emerg_Rover.enqueue(R1);
 		}
-		if (InCheckup_Emerg.peek().getInCheckDays() == day) {
-			Rover R;
-			R = InCheckup_Emerg.dequeue();
-			bool check2 = MaintenanceCheck(R);
-			if (check2) {
-				R.setInCheckDays(-1);
-				Priority = R.getSpeed();
-				Emerg_Rover.enqueue(R, Priority);
-			}
-		}
-		else //bug fix needs review
-		{
-			check = false;
+	}
+	Rover R2;
+	while (InCheckup_Emerg.checkKey(day, R2)) {
+		InCheckup_Emerg.dequeue(R2);
+		bool check2 = MaintenanceCheck(R2);
+		if (check2) {
+			R2.setInCheckDays(-1);
+			Emerg_Rover.enqueue(R2);
 		}
 	}
 }
@@ -348,39 +367,25 @@ bool MarsStation::MaintenanceCheck(Rover &r) {
 	if (prob <= 4) {
 		int RandominMaintenanceDay = day + (1 + rand() % 20);
 		r.setinMaintenanceDay(RandominMaintenanceDay);
-		InMaintenance.enqueue(r, RandominMaintenanceDay);
+		InMaintenance.enqueue(r);
 		return false;
 	} 
 	return true;
 }
 
 void MarsStation::Maintenance() {
-	bool check = true;
-	int key;
-	while (check) {
-		if (InMaintenance.peek(key).getinMaintenanceDay() == day) {
-			Rover R;
-			int Priority;
-			R = InMaintenance.dequeue(key);
-			R.setInCheckDays(-1);
-			R.setinMaintenanceDay(-1);
-			char type = R.getTYP();
-			if (type == 'P')
-			{
-				Priority = R.getSpeed();
-				Pol_Rover.enqueue(R, Priority);
-			}
-			else
-			{
-				if (type == 'E')
-				{
-					Priority = R.getSpeed();
-					Emerg_Rover.enqueue(R, Priority);
-				}
-			}
-
+	Rover R;
+	while (InMaintenance.checkKey(day, R)) {
+		InMaintenance.dequeue(R);
+		R.setInCheckDays(-1);
+		R.setinMaintenanceDay(-1);
+		char type = R.getTYP();
+		if (type == 'P') {
+			Pol_Rover.enqueue(R);
 		}
-		else check = false;
+		else if (type == 'E') {
+				Emerg_Rover.enqueue(R);
+		}
 	}
 }
 
@@ -400,62 +405,61 @@ void MarsStation::GetPolarWaiting_Mission(ArrQueue<Mission> &m)
 }
 
 
-PrioQueue<Mission> MarsStation::GetEmergWaiting_Mission()
+ArrQueue<Mission> MarsStation::GetEmergWaiting_Mission()
 {
 	return EmergWaiting_Mission;
 }
 
-void MarsStation::GetBusy_Rovers(PrioQueue<Rover>& E, PrioQueue<Rover>& P)
+void MarsStation::GetBusy_Rovers(ArrQueue<Rover>& E, ArrQueue<Rover>& P)
 {
 	Rover Item;
 	int Key;
-	while (Busy_Rovers.dequeue(Item, Key))
+	while (Busy_Rovers.dequeue(Item))
 	{
 		if (Item.getTYP() == 'E')
-			E.enqueue(Item, Key);
+			E.enqueue(Item);
 		else if (Item.getTYP() == 'P')
-			P.enqueue(Item, Key);
+			P.enqueue(Item);
 	}
 }
 
-PrioQueue<Mission> MarsStation::GetEmergInExecution()  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
+ArrQueue<Mission> MarsStation::GetEmergInExecution()  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
 {
-	PrioQueue<Mission> Q;
-	PrioQueue<Mission> Temp;
+	ArrQueue<Mission> Q;
+	ArrQueue<Mission> Temp;
 	Mission Item;
-	int Key;
-	while (InExecution.dequeue(Item, Key))
+	while (InExecution.dequeue(Item))
 	{
 		if (Item.getTYP() == 'E')
-			Q.enqueue(Item, Key);
-		Temp.enqueue(Item, Key);
+			Q.enqueue(Item);
+		Temp.enqueue(Item);
 	}
-	while (Temp.dequeue(Item, Key))
-		InExecution.enqueue(Item, Key);
+	while (Temp.dequeue(Item))
+		InExecution.enqueue(Item);
 	return Q;
 }
-PrioQueue<Mission> MarsStation::GetPolarInExecution()  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
+ArrQueue<Mission> MarsStation::GetPolarInExecution()  // GETS INEXECUTION MISSIONS BUT SEPARATES THEM ACCORDING TO TYPE
 {
-	PrioQueue<Mission> Q;
-	PrioQueue<Mission> Temp;
+	ArrQueue<Mission> Q;
+	ArrQueue<Mission> Temp;
 	Mission Item;
 	int Key;
-	while (InExecution.dequeue(Item, Key))
+	while (InExecution.dequeue(Item))
 	{
 		if (Item.getTYP() == 'P')
-			Q.enqueue(Item, Key);
-		Temp.enqueue(Item, Key);
+			Q.enqueue(Item);
+		Temp.enqueue(Item);
 	}
-	while (Temp.dequeue(Item, Key))
-		InExecution.enqueue(Item, Key);
+	while (Temp.dequeue(Item))
+		InExecution.enqueue(Item);
 	return Q;
 }
 
-PrioQueue<Rover> MarsStation::GetAvailablePol_Rover()
+ArrQueue<Rover> MarsStation::GetAvailablePol_Rover()
 {
 	return Pol_Rover;
 }
-PrioQueue<Rover> MarsStation::GetAvailableEmerg_Rover()
+ArrQueue<Rover> MarsStation::GetAvailableEmerg_Rover()
 {
 	return Emerg_Rover;
 }

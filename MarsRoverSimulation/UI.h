@@ -237,26 +237,7 @@ public:
 	}
 
 
-	//    PrioQueue ROVER PRINT   //
-	void printID(PrioQueue<Rover>& Q)
-	{
-		PrioQueue <Rover> Temp;
-		Rover Item;
-		int key;
-
-		Q.dequeue(Item, key);
-		cout << Item.getID();
-		Temp.enqueue(Item, key);
-
-		while (Q.dequeue(Item, key))
-		{
-			cout << "," << Item.getID();
-			Temp.enqueue(Item, key);
-		}
-		while (Temp.dequeue(Item, key))
-			Q.enqueue(Item, key);
-	}
-
+	
 
 	//    ArrQueue MISSION PRINT    //
 	void printID(ArrQueue<Mission>& Q)
@@ -277,26 +258,6 @@ public:
 			Q.enqueue(Item);
 	}
 
-
-	//   PrioQueue MISSION PRINT   //
-	void printID(PrioQueue<Mission>& Q)
-	{
-		PrioQueue <Mission> Temp;
-		Mission Item;
-		int key;
-
-		Q.dequeue(Item, key);
-		cout << Item.getID();
-		Temp.enqueue(Item, key);
-
-		while (Q.dequeue(Item, key))
-		{
-			cout << "," << Item.getID();
-			Temp.enqueue(Item, key);
-		}
-		while (Temp.dequeue(Item, key))
-			Q.enqueue(Item, key);
-	}
 
 	// END OF PRINT FUNCTIONS //
 	//-------------------------------------------------------------------------------------------------------------------------------------//
@@ -404,7 +365,7 @@ public:
 	//	cout << NumberOfCompleted << " Completed Missions: " << "["; printID(CompletedEmerg); cout << "] " << "("; printID(CompletedPolar); cout << ") " << endl;
 	//}
 
-	void Interactive(int Day, int waiting, PrioQueue<Mission>& EmergW, ArrQueue<Mission>& PolarW, int InExecution, PrioQueue<Mission>& EmergI, PrioQueue<Mission>& PolarI, int available, PrioQueue<Rover>& EmergA, PrioQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
+	void Interactive(int Day, int waiting, ArrQueue<Mission>& EmergW, ArrQueue<Mission>& PolarW, int InExecution, ArrQueue<Mission>& EmergI, ArrQueue<Mission>& PolarI, int available, ArrQueue<Rover>& EmergA, ArrQueue<Rover>& PolarA, int InCheckup, ArrQueue<Rover>& EmergIc, ArrQueue<Rover>& PolarIc, int completed, ArrQueue<Mission>& EmergC, ArrQueue<Mission>& PolarC)   // RUNS INTERACTIVE
 	{
 		//OutputParameters();
 		cout << endl;
