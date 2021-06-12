@@ -226,7 +226,7 @@ public:
 	
 	
 	//    ArrQueue ROVER PRINT   //
-	void printID(ArrQueue<Rover>& Q)
+	/*void printID(ArrQueue<Rover>& Q)
 	{
 		ArrQueue <Rover> Temp;
 		Rover Item;
@@ -242,13 +242,13 @@ public:
 		}
 		while (Temp.dequeue(Item))
 			Q.enqueue(Item);
-	}
+	}*/
 
 
 	
 
 	//    ArrQueue MISSION PRINT    //
-	void printID(ArrQueue<Mission>& Q)
+	/*void printID(ArrQueue<Mission>& Q)
 	{
 		ArrQueue <Mission> Temp;
 		Mission Item;
@@ -264,7 +264,7 @@ public:
 		}
 		while (Temp.dequeue(Item))
 			Q.enqueue(Item);
-	}
+	}*/
 
 
 	// END OF PRINT FUNCTIONS //

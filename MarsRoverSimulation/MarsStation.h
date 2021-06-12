@@ -61,8 +61,6 @@ private:
 	ArrQueue<Mission> InExecution;
 
 	UI ui;
-	
-
 
 public:
 	MarsStation(char* F_Arr, char* TYP_Arr, int* ED_Arr, int* ID_Arr, int* TLOC_Arr, int* MDUR_Arr, int* SIG_Arr, int EventSizein,
@@ -532,6 +530,7 @@ public:
 			else
 				ui.Silent();
 		}
+	
 	}
 	Mission GetMax(ArrQueue<Mission>& Q)
 	{
@@ -568,7 +567,7 @@ void MarsStation::Formulate() {
 	bool check = true;
 	while (check) {
 		// if the mission is to be formulated today, 
-		int Debug = EventList.peek().getED();
+		/*int Debug = EventList.peek().getED();*/
 		if (EventList.peek().getED() == day && !EventList.isempty() ) {
 			if (EventList.peek().getTYP() == 'P') {
 				Mission M(EventList.peek().getED(), 'P', EventList.peek().getID(), EventList.peek().getTLOC(), EventList.peek().getMDUR(), EventList.peek().getSIG());
@@ -699,7 +698,7 @@ void MarsStation::Complete() {
 }
 
 bool MarsStation::CheckUpCheck(Rover &r) {
-	if (r.getMissionNO() == NMissionsToCheckup) {
+	if (r.getMissionNO() % NMissionsToCheckup == 0) {
 		int CheckDays;
 		char type = r.getTYP();
 		if (type == 'P') {
@@ -724,7 +723,7 @@ void MarsStation::CheckUp() {
 		bool check2 = MaintenanceCheck(R1);
 		if (check2) {
 			R1.setInCheckDays(-1);
-			Emerg_Rover.enqueue(R1);
+			Pol_Rover.enqueue(R1);
 		}
 	}
 	Rover R2;
@@ -742,7 +741,7 @@ bool MarsStation::MaintenanceCheck(Rover &r) {
 	int prob = rand() % 9;
 	if (prob <= 4) {
 		int RandominMaintenanceDay = day + (1 + rand() % 20);
-		r.setinMaintenanceDay(RandominMaintenanceDay);
+		r.setKey(RandominMaintenanceDay);
 		InMaintenance.enqueue(r);
 		return false;
 	} 
